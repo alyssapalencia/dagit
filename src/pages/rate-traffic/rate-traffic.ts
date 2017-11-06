@@ -19,9 +19,10 @@ export class RateTrafficPage {
   rateTrafficInfo: any;
   time = '11:44 AM';
   date = '10/22/2017';
+  trafficStatus: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase) {
-    console.log(firebase.getRateTraffic());
+    this.trafficStatus = this.firebase.getRateTraffic();
   }
 
   addRateTraffic(info) {
