@@ -10,6 +10,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireModule } from 'angularfire2';
 import { Firebase } from './../providers/firebase';
 
+
 var dagitFirebase = {
   apiKey: "AIzaSyDPsMJ-x7W6_U_k3JsNwMNkxL38e8NkQDI",
   authDomain: "dagit-7cbac.firebaseapp.com",

@@ -18,7 +18,7 @@
     <ion-col>
         <ion-list>
             <ion-item>
-              <ion-label>Location</ion-label>
+              <ion-label>Select Location</ion-label>
               <ion-select [(ngModel)]="location">
                 <ion-option value="Real St./E.J. Blanco Drive Piapi">Real St./E.J. Blanco Drive Piapi</ion-option>
                 <ion-option value="SPUD">SPUD</ion-option>
@@ -89,15 +89,15 @@
   </ion-row>
   <ion-row>
     <ion-col>
-        <div align="center">Current Parking Availability</div>
+        <ion-item>
+          Current Parking Availability
+          <ion-badge item-end color="btngreen">
+            AVAILABLE
+          </ion-badge>
+        </ion-item>
     </ion-col>
   </ion-row>
-  <ion-row>
-      <ion-col>
-          <div align="center">[PARKING AVAILABILITY]</div>
-      </ion-col>
-    </ion-row>
-  <ion-row>
+  <ion-row style="margin-top:25%;">
     <ion-col>
         <button ion-button icon-left full color="btngreen" class="btnheight">
             <ion-icon name="checkmark-circle"></ion-icon>

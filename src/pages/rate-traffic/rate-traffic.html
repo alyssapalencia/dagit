@@ -18,7 +18,7 @@
     <ion-col>
         <ion-list>
             <ion-item>
-              <ion-label>Location</ion-label>
+              <ion-label>Select Location</ion-label>
               <ion-select [(ngModel)]="location">
                 <ion-option value="Real St./E.J. Blanco Drive Piapi">Real St./E.J. Blanco Drive Piapi</ion-option>
                 <ion-option value="SPUD">SPUD</ion-option>
@@ -89,7 +89,12 @@
   </ion-row>
   <ion-row>
     <ion-col>
-        <div align="center">Current Traffic Condition</div>
+        <ion-item>
+        Current Traffic Condition
+        <ion-badge item-end color="btnred">
+        HEAVY
+        </ion-badge>
+        </ion-item>
     </ion-col>
   </ion-row>
   <ion-row>
@@ -97,11 +102,11 @@
         <div align="center" *ngFor = "let status of trafficStatus | async">{{ status.status }}</div>
     </ion-col>
   </ion-row>
-  <ion-row>
+  <ion-row style="margin-top:15%;">
     <ion-col>
-        <button ion-button full color="btngreen" class="btnheight" (click)="addRateTraffic('Light')">Light</button>
-        <button ion-button full color="btnorange" class="btnheight" (click)="addRateTraffic('Moderate')">Moderate</button>
-        <button ion-button full color="btnred" class="btnheight" (click)="addRateTraffic('Heavy')">Heavy</button>
+        <button ion-button full color="btngreen" class="btnheight" (click)="addRateTraffic('LIGHT')">LIGHT</button>
+        <button ion-button full color="btnorange" class="btnheight" (click)="addRateTraffic('MODERATE')">MODERATE</button>
+        <button ion-button full color="btnred" class="btnheight" (click)="addRateTraffic('HEAVY')">HEAVY</button>
     </ion-col>
   </ion-row>
 </ion-content>
