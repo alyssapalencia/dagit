@@ -10,10 +10,18 @@ export class Firebase{
     }
 
     addRateTraffic(rateTraffic){
-        this.dagit.list('/onfield/ratetraffic').push(rateTraffic);
+        this.dagit.list('/notification').push(rateTraffic);
     }
 
     getRateTraffic(){
-        return this.dagit.list('/onfield/ratetraffic');
+        return this.dagit.list('/notification');
+    }
+
+    addParking(parkingStat){
+        this.dagit.list('/notification').push(parkingStat);
+    }
+
+    getParking(){
+        return this.dagit.list('/notification');
     }
 }

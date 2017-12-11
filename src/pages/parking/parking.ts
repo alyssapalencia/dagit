@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the ParkingPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { Firebase } from '../../providers/firebase';
 
 @IonicPage()
 @Component({
@@ -14,12 +8,28 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'parking.html',
 })
 export class ParkingPage {
+  rateParkingInfo: any;
+  timeStamp = Date.now();
+  parkingStatus: any;
+  location: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase) {
+    this.parkingStatus = this.firebase.getParking();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ParkingPage');
+  }
+
+  addParking(info) {
+    this.rateParkingInfo = {
+      "timeStamp": this.timeStamp,
+      "location": this.location,
+      "rating": info,
+      "type": 'parking'
+    };
+     console.log(info); 
+     this.firebase.addParking(this.rateParkingInfo);
   }
 
 }

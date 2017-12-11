@@ -99,15 +99,15 @@
   </ion-row>
   <ion-row style="margin-top:25%;">
     <ion-col>
-        <button ion-button icon-left full color="btngreen" class="btnheight">
-            <ion-icon name="checkmark-circle"></ion-icon>
-            Parking Available
-          </button>
+        <button ion-button icon-left full color="btngreen" class="btnheight" (click)="addParking('Available')">
+          <ion-icon name="checkmark-circle"></ion-icon>
+          Parking Available
+        </button>
         
-          <button ion-button icon-left full color="btnred" class="btnheight">
-              <ion-icon name="close-circle"></ion-icon>
-              Parking Unavailable
-            </button>
+        <button ion-button icon-left full color="btnred" class="btnheight" (click)="addParking('No Available')">
+          <ion-icon name="close-circle"></ion-icon>
+          Parking Unavailable
+        </button>
     </ion-col>
   </ion-row>
 </ion-content>

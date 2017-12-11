@@ -2,12 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Firebase } from '../../providers/firebase';
 
-/**
- * Generated class for the RateTrafficPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -17,9 +11,10 @@ import { Firebase } from '../../providers/firebase';
 export class RateTrafficPage {
 
   rateTrafficInfo: any;
-  time = '11:44 AM';
-  date = '10/22/2017';
+  notifID = 1;
+  timeStamp = Date.now();
   trafficStatus: any;
+  location: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase) {
     this.trafficStatus = this.firebase.getRateTraffic();
@@ -27,9 +22,10 @@ export class RateTrafficPage {
 
   addRateTraffic(info) {
     this.rateTrafficInfo = {
-      "status": info,
-      "time": this.time,
-      "date": this.date
+      "timeStamp": this.timeStamp,
+      "location": this.location,
+      "rating": info,
+      "type": 'traffic'
     };
      console.log(info); 
      this.firebase.addRateTraffic(this.rateTrafficInfo);
