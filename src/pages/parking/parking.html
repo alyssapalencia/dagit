@@ -91,9 +91,13 @@
     <ion-col>
         <ion-item>
           Current Parking Availability
-          <ion-badge item-end color="btngreen">
-            AVAILABLE
-          </ion-badge>
+          <span *ngFor = "let status of trafficStatus | async">
+            <span *ngIf = "status.type == 'parking'">
+              <ion-badge item-end color="btngreen">
+                {{status.rating}}
+              </ion-badge>
+            </span>  
+          </span>
         </ion-item>
     </ion-col>
   </ion-row>
