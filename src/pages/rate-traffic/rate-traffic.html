@@ -45,7 +45,7 @@
         <div align="center" *ngFor = "let status of trafficStatus | async; let last = last; let i = index" ><ion-input [(ngModel)] = "last1">{{status.rating}}</ion-input>{{ this.last1 }}</div>
     </ion-col>
   </ion-row>
-  <ion-row style="margin-top:15%;">
+  <ion-row>
     <ion-col>
         <button ion-button full color="btngreen" class="btnheight" (click)="addRateTraffic('Light')">LIGHT</button><br>
         <button ion-button full color="btnorange" class="btnheight" (click)="addRateTraffic('Moderate')">MODERATE</button><br>
