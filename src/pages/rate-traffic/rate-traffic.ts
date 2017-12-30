@@ -15,6 +15,7 @@ export class RateTrafficPage {
   timeStamp = Date.now();
   trafficStatus: any;
   location: any;
+  last1: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase) {
     this.trafficStatus = this.firebase.getRateTraffic();
@@ -29,6 +30,7 @@ export class RateTrafficPage {
     };
      console.log(info); 
      this.firebase.addRateTraffic(this.rateTrafficInfo);
+     //this.last = this.firebase.getLastToken();
   }
 
 }

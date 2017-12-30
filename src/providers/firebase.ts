@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import 'rxjs/add/operator/map';
+import { FirebaseListObservable } from 'angularfire2/database';
 
 @Injectable()
 export class Firebase{
@@ -23,5 +24,13 @@ export class Firebase{
 
     getParking(){
         return this.dagit.list('/notification');
+    }
+
+    public getLastToken(): FirebaseListObservable<any[]>{
+        return this.dagit.list('/notifications',{
+            query:{
+                limitToLast:1
+            }
+        });
     }
 }

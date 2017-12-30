@@ -18,15 +18,31 @@
     <ion-col>
         <ion-item>
         Current Traffic Condition
-        <ion-badge item-end color="btnred">
-        HEAVY
-        </ion-badge>
+        <span *ngFor = 'let status of trafficStatus | async; let last = last;'>
+          <span *ngIf = 'this.info != null'>{{info}}
+            <!--<span *ngIf = 'status.rating == Heavy'>
+              <ion-badge item-end color="btnred">
+              {{ status.rating }}
+              </ion-badge>
+            </span>-->
+          </span>
+          <!--<div *ngIf = 'status.rating == Moderate'>
+            <ion-badge item-end color="btnorange">
+            {{ status.rating }}
+            </ion-badge>
+          </div>
+          <div *ngIf = 'status.rating == Light'>
+            <ion-badge item-end color="btngreen">
+            {{ status.rating }}
+            </ion-badge>
+          </div>-->
+        </span>
         </ion-item>
     </ion-col>
   </ion-row>
   <ion-row>
     <ion-col>
-        <div align="center" *ngFor = "let status of trafficStatus | async">{{ status.status }}</div>
+        <div align="center" *ngFor = "let status of trafficStatus | async; let last = last; let i = index" ><ion-input [(ngModel)] = "last1">{{status.rating}}</ion-input>{{ this.last1 }}</div>
     </ion-col>
   </ion-row>
   <ion-row style="margin-top:15%;">
