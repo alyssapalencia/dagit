@@ -10,12 +10,21 @@ import { Firebase } from '../../providers/firebase';
 })
 export class RateTrafficPage {
 
+  today = new Date();
   rateTrafficInfo: any;
   notifID = 1;
-  timeStamp = Date.now();
   trafficStatus: any;
   location: any;
   last1: any;
+
+  date = (this.today.getMonth() + 1) + '/' + this.today.getDate() + '/' + this.today.getFullYear();
+  hours = this.today.getHours() <= 12 ? this.today.getHours() : this.today.getHours() - 12;
+  am_pm = this.today.getHours() >= 12 ? 'PM' : 'AM';
+  hoursFormatted = this.hours < 10 ? '0' + this.hours : this.hours;
+  minutes = this.today.getMinutes() < 10 ? '0' + this.today.getMinutes() : this.today.getMinutes();
+
+  time = this.hoursFormatted + ':' + this.minutes + ':' +  ' ' + this.am_pm;
+  timeStamp = this.date + ' ' + this.time;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase) {
     this.trafficStatus = this.firebase.getRateTraffic();
@@ -23,10 +32,9 @@ export class RateTrafficPage {
 
   addRateTraffic(info) {
     this.rateTrafficInfo = {
-      "timeStamp": this.timeStamp,
-      "location": this.location,
-      "rating": info,
-      "type": 'traffic'
+      "category": 'Traffic',
+      "notifDetail": info + ' Traffic: ' + 'Perdices',
+      "timeStamp": this.timeStamp
     };
      console.log(info); 
      this.firebase.addRateTraffic(this.rateTrafficInfo);
