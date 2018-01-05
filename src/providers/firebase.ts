@@ -11,23 +11,23 @@ export class Firebase{
     }
 
     addRateTraffic(rateTraffic){
-        this.dagit.list('/notification').push(rateTraffic);
+        this.dagit.list('/NOTIFICATION').push(rateTraffic);
     }
 
     getRateTraffic(){
-        return this.dagit.list('/notification');
+        return this.dagit.list('/NOTIFICATION');
     }
 
     addParking(parkingStat){
-        this.dagit.list('/notification').push(parkingStat);
+        this.dagit.list('/NOTIFICATION').push(parkingStat);
     }
 
     getParking(){
-        return this.dagit.list('/notification');
+        return this.dagit.list('/NOTIFICATION');
     }
 
     public getLastToken(): FirebaseListObservable<any[]>{
-        return this.dagit.list('/notifications',{
+        return this.dagit.list('/NOTIFICATION',{
             query:{
                 limitToLast:1
             }
