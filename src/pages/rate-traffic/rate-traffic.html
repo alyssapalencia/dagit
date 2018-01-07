@@ -8,43 +8,31 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content no-bounce padding>
   <ion-row>
     <ion-col>
-        <ion-item>
-        Current Traffic Condition
+      <ion-item>
+        <ion-icon name="alert" item-start></ion-icon>
+        Current Status
         <span *ngFor = 'let status of trafficStatus | async; let last = last;'>
-          <span *ngIf = 'this.info != null'>{{info}}
-            <!--<span *ngIf = 'status.rating == Heavy'>
-              <ion-badge item-end color="btnred">
-              {{ status.rating }}
-              </ion-badge>
-            </span>-->
-          </span>
-          <!--<div *ngIf = 'status.rating == Moderate'>
-            <ion-badge item-end color="btnorange">
-            {{ status.rating }}
-            </ion-badge>
-          </div>
-          <div *ngIf = 'status.rating == Light'>
-            <ion-badge item-end color="btngreen">
-            {{ status.rating }}
-            </ion-badge>
-          </div>-->
+          <span *ngIf = 'this.info != null'>{{info}}</span>
         </span>
-        </ion-item>
+        <ion-badge color="btnorange" item-end>MODERATE</ion-badge>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="time" item-start></ion-icon>
+        Last Updated
+        <ion-badge color="light" item-end>5:08PM</ion-badge>
+      </ion-item>
     </ion-col>
   </ion-row>
+  
   <ion-row>
-    <ion-col>
-        <div align="center" *ngFor = "let status of trafficStatus | async; let last = last; let i = index" ><ion-input [(ngModel)] = "last1">{{status.rating}}</ion-input>{{ this.last1 }}</div>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col>
-        <button ion-button full color="btngreen" class="btnheight" (click)="addRateTraffic('Light')">LIGHT</button><br>
-        <button ion-button full color="btnorange" class="btnheight" (click)="addRateTraffic('Moderate')">MODERATE</button><br>
-        <button ion-button full color="btnred" class="btnheight" (click)="addRateTraffic('Heavy')">HEAVY</button>
+    <ion-col style="transform:translateY(35%);">
+      <button ion-button full large color="btngreen" (click)="addRateTraffic('Light')">LIGHT</button><br>
+      <button ion-button full large color="btnorange" style="color:white;" (click)="addRateTraffic('Moderate')">MODERATE</button><br>
+      <button ion-button full large color="btnred" (click)="addRateTraffic('Heavy')">HEAVY</button>
     </ion-col>
   </ion-row>
 </ion-content>

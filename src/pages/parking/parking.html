@@ -7,32 +7,40 @@
 
 </ion-header>
 
-
-<ion-content padding>
+<ion-content no-bounce padding>
   <ion-row>
     <ion-col>
-        <ion-item>
-          Current Parking Availability
-          <span *ngFor = "let status of trafficStatus | async">
-            <span *ngIf = "status.type == 'parking'">
-              <ion-badge item-end color="btngreen">
-                {{status.rating}}
-              </ion-badge>
-            </span>  
-          </span>
+      <ion-item>
+        <ion-icon name="alert" item-start></ion-icon>
+        Current Status
+        <ion-badge color="btngreen" item-end>AVAILABLE</ion-badge>
+        <span *ngFor = "let status of trafficStatus | async">
+          <span *ngIf = "status.type == 'parking'">
+            <ion-badge item-end color="btngreen">
+              {{status.rating}}
+            </ion-badge>
+          </span>  
+        </span>
+      </ion-item>
+
+      <ion-item>
+          <ion-icon name="time" item-start></ion-icon>
+          Last Updated
+          <ion-badge color="light" item-end>4:20PM</ion-badge>
         </ion-item>
     </ion-col>
   </ion-row>
-  <ion-row style="margin-top:25%;">
+
+  <ion-row style="padding-top:20%;">
     <ion-col>
-        <button ion-button icon-left full color="btngreen" class="btnheight" (click)="addParking('Available')">
+        <button ion-button icon-left full large color="btngreen" (click)="addParking('Available')">
           <ion-icon name="checkmark-circle"></ion-icon>
-          Parking Available
+          PARKING AVAILABLE
         </button>
         <br>
-        <button ion-button icon-left full color="btnred" class="btnheight" (click)="addParking('No Available')">
+        <button ion-button icon-left full large color="btnred" (click)="addParking('No Available')">
           <ion-icon name="close-circle"></ion-icon>
-          Parking Unavailable
+          PARKING UNAVAILABLE
         </button>
     </ion-col>
   </ion-row>
