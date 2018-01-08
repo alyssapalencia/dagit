@@ -13,20 +13,13 @@
       <ion-item>
         <ion-icon name="alert" item-start></ion-icon>
         Current Status
-        <ion-badge color="btngreen" item-end>AVAILABLE</ion-badge>
-        <span *ngFor = "let status of trafficStatus | async">
-          <span *ngIf = "status.type == 'parking'">
-            <ion-badge item-end color="btngreen">
-              {{status.rating}}
-            </ion-badge>
-          </span>  
-        </span>
+        <ion-badge color="btngreen" item-end>{{ getLastParking() }}</ion-badge>
       </ion-item>
 
       <ion-item>
           <ion-icon name="time" item-start></ion-icon>
           Last Updated
-          <ion-badge color="light" item-end>4:20PM</ion-badge>
+          <ion-badge color="light" item-end>{{ getLastTime() }}</ion-badge>
         </ion-item>
     </ion-col>
   </ion-row>
