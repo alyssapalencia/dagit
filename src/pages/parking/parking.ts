@@ -17,6 +17,7 @@ export class ParkingPage {
   dbTime: any[] = [];
   lastParking: any;
   lastTime: any;
+  rating = "No Available";
 
   date = (this.today.getMonth() + 1) + '/' + this.today.getDate() + '/' + this.today.getFullYear();
   hours = this.today.getHours() <= 12 ? this.today.getHours() : this.today.getHours() - 12;

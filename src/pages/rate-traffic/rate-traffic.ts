@@ -19,6 +19,7 @@ export class RateTrafficPage {
   dbTime: any[] = [];
   lastTraffic: any;
   lastTime: any;
+  rating = "Light";
 
   date = (this.today.getMonth() + 1) + '/' + this.today.getDate() + '/' + this.today.getFullYear();
   hours = this.today.getHours() <= 12 ? this.today.getHours() : this.today.getHours() - 12;
