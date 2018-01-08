@@ -12,10 +12,13 @@ export class RateTrafficPage {
 
   today = new Date();
   rateTrafficInfo: any;
-  notifID = 1;
   trafficStatus: any;
   location: any;
-  last1: any;
+  dbCategory: any[] = [];
+  dbTraffic: any[] = [];
+  dbTime: any[] = [];
+  lastTraffic: any;
+  lastTime: any;
 
   date = (this.today.getMonth() + 1) + '/' + this.today.getDate() + '/' + this.today.getFullYear();
   hours = this.today.getHours() <= 12 ? this.today.getHours() : this.today.getHours() - 12;
@@ -28,6 +31,34 @@ export class RateTrafficPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase) {
     this.trafficStatus = this.firebase.getRateTraffic();
+
+    var i = 0;
+    this.trafficStatus.subscribe(snapshots => {
+      snapshots.forEach(snapshot => {
+        this.dbCategory[i] = snapshot.val().category;
+        this.dbTraffic[i] = snapshot.val().notifDetail;
+        this.dbTime[i] = snapshot.val().timeStamp;
+        i++;
+      });
+    });
+  }
+
+  getLastTraffic() {
+    for(var i = 0; i<this.dbTraffic.length; i++) {
+     if(this.dbCategory[i] == 'Traffic'){
+      this.lastTraffic = this.dbTraffic[i];
+     }
+    }
+    return this.lastTraffic;
+  }
+
+  getLastTime() {
+    for(var i = 0; i<this.dbTime.length; i++) {
+     if(this.dbCategory[i] == 'Traffic'){
+      this.lastTime = this.dbTime[i];
+     }
+    }
+    return this.lastTime;
   }
 
   addRateTraffic(info) {
@@ -38,7 +69,6 @@ export class RateTrafficPage {
     };
      console.log(info); 
      this.firebase.addRateTraffic(this.rateTrafficInfo);
-     //this.last = this.firebase.getLastToken();
   }
 
 }

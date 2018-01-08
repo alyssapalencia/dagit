@@ -12,6 +12,11 @@ export class ParkingPage {
   rateParkingInfo: any;
   parkingStatus: any;
   location: any;
+  dbCategory: any[] = [];
+  dbParking: any[] = [];
+  dbTime: any[] = [];
+  lastParking: any;
+  lastTime: any;
 
   date = (this.today.getMonth() + 1) + '/' + this.today.getDate() + '/' + this.today.getFullYear();
   hours = this.today.getHours() <= 12 ? this.today.getHours() : this.today.getHours() - 12;
@@ -25,6 +30,16 @@ export class ParkingPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase) {
     this.parkingStatus = this.firebase.getParking();
+
+    var i = 0;
+    this.parkingStatus.subscribe(snapshots => {
+      snapshots.forEach(snapshot => {
+        this.dbCategory[i] = snapshot.val().category;
+        this.dbParking[i] = snapshot.val().notifDetail;
+        this.dbTime[i] = snapshot.val().timeStamp;
+        i++;
+      });
+    });
   }
 
   ionViewDidLoad() {
@@ -39,6 +54,24 @@ export class ParkingPage {
     };
      console.log(info); 
      this.firebase.addParking(this.rateParkingInfo);
+  }
+
+  getLastParking() {
+    for(var i = 0; i<this.dbParking.length; i++) {
+     if(this.dbCategory[i] == 'Parking'){
+      this.lastParking = this.dbParking[i];
+     }
+    }
+    return this.lastParking;
+  }
+
+  getLastTime() {
+    for(var i = 0; i<this.dbTime.length; i++) {
+     if(this.dbCategory[i] == 'Parking'){
+      this.lastTime = this.dbTime[i];
+     }
+    }
+    return this.lastTime;
   }
 
 }

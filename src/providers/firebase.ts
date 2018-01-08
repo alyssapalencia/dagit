@@ -15,7 +15,9 @@ export class Firebase{
     }
 
     getRateTraffic(){
-        return this.dagit.list('/NOTIFICATIONS');
+        return this.dagit.list('/NOTIFICATIONS', {
+            preserveSnapshot: true
+        });
     }
 
     addParking(parkingStat){
@@ -23,7 +25,9 @@ export class Firebase{
     }
 
     getParking(){
-        return this.dagit.list('/NOTIFICATIONS');
+        return this.dagit.list('/NOTIFICATIONS', {
+            preserveSnapshot: true
+        });
     }
 
     getUserDetail(){
@@ -31,12 +35,4 @@ export class Firebase{
           preserveSnapshot: true
         });
       }
-
-    public getLastToken(): FirebaseListObservable<any[]>{
-        return this.dagit.list('/NOTIFICATIONS',{
-            query:{
-                limitToLast:1
-            }
-        });
-    }
 }
