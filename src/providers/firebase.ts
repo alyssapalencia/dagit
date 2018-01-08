@@ -26,6 +26,12 @@ export class Firebase{
         return this.dagit.list('/NOTIFICATIONS');
     }
 
+    getUserDetail(){
+        return this.dagit.list('/ACCOUNTS/ON_FIELD_TMO', {
+          preserveSnapshot: true
+        });
+      }
+
     public getLastToken(): FirebaseListObservable<any[]>{
         return this.dagit.list('/NOTIFICATIONS',{
             query:{
