@@ -15,17 +15,16 @@
         <ion-icon name="alert" item-start></ion-icon>
         Current Status
         <ion-item text-wrap>
-            <div *ngIf = 'rating == "Light"'>
+            <div *ngIf = 'getRating() == "Light"'>
               <ion-badge color="btngreen" item-end>{{ getLastTraffic() }}</ion-badge>
             </div>
-            <div *ngIf = 'rating == "Moderate"'>
+            <div *ngIf = 'getRating() == "Moderate"'>
               <ion-badge color="btnorange" item-end>{{ getLastTraffic() }}</ion-badge>
             </div>
-            <div *ngIf = 'rating == "Heavy"'>
+            <div *ngIf = 'getRating() == "Heavy"'>
                 <ion-badge color="btnred" item-end>{{ getLastTraffic() }}</ion-badge>
             </div>
           </ion-item>
-        <!--<ion-badge item-end>{{ getLastTraffic() }}</ion-badge>-->
       </ion-item>
 
       <ion-item>

@@ -34,22 +34,18 @@ export class LoginPage {
 
   checkAuth(){
     var check=false;
-
     for(var i=0; i<this.confirmUser.length; i++){
-      for(var j=0; j<this.confirmPass.length; j++){
-        if(this.tempuser == this.confirmUser[i]){
-          if(this.temppass == this.confirmPass[j]){
-            check=true;
-            console.log("logged in");
-            this.navCtrl.setRoot('TabsPage');
-            this.navCtrl.popToRoot();
-
-            let toast = this.toastCtrl.create({
-              message: 'Login successful.',
-              duration: 2000,
-            });
-            toast.present();
-          }
+      if(this.tempuser == this.confirmUser[i]){
+        if(this.temppass == this.confirmPass[i]){
+          check=true;
+          console.log("logged in");
+          this.navCtrl.setRoot('TabsPage');
+          this.navCtrl.popToRoot();
+          let toast = this.toastCtrl.create({
+          message: 'Login successful.',
+            duration: 2000,
+          });
+          toast.present();
         }
       }
     }

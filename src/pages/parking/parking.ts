@@ -75,4 +75,18 @@ export class ParkingPage {
     return this.lastTime;
   }
 
+  getRating(){
+    for(var i = 0; i<this.dbParking.length; i++) {
+      if(this.dbCategory[i] == 'Parking'){
+       this.lastParking = this.dbParking[i];
+      }
+    }
+    if(this.lastParking.startsWith("Available")){
+      this.rating = this.lastParking.slice(0, 9);
+    }
+    else if(this.lastParking.startsWith("No Available")){
+      this.rating = this.lastParking.slice(0, 12);
+    }
+    return this.rating;
+  }
 }

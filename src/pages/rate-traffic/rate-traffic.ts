@@ -19,7 +19,8 @@ export class RateTrafficPage {
   dbTime: any[] = [];
   lastTraffic: any;
   lastTime: any;
-  rating = "Light";
+  rating: any;
+  test: any;
 
   date = (this.today.getMonth() + 1) + '/' + this.today.getDate() + '/' + this.today.getFullYear();
   hours = this.today.getHours() <= 12 ? this.today.getHours() : this.today.getHours() - 12;
@@ -70,6 +71,27 @@ export class RateTrafficPage {
     };
      console.log(info); 
      this.firebase.addRateTraffic(this.rateTrafficInfo);
+  }
+
+  getRating(){
+    for(var i = 0; i<this.dbTraffic.length; i++) {
+      if(this.dbCategory[i] == 'Traffic'){
+       this.lastTraffic = this.dbTraffic[i];
+      }
+    }
+    /*if(this.lastTraffic.startsWith("Light")){
+      //console.log("here2");
+      this.rating = this.lastTraffic.slice(0, 5);
+      console.log(this.rating);
+    }
+    /*
+    else if(this.lastTraffic.startsWith("Moderate")){
+      this.rating = this.lastTraffic.slice(0, 8);
+    }
+    else if(this.lastTraffic.startsWith("Heavy")){
+      this.rating = this.lastTraffic.slice(0, 5);
+    }
+    return this.rating;*/
   }
 
 }

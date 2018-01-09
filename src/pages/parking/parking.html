@@ -14,20 +14,19 @@
         <ion-icon name="alert" item-start></ion-icon>
         Current Status
         <ion-item text-wrap>
-          <div *ngIf = 'rating == "Available"'>
+          <div *ngIf = 'getRating() == "Available"'>
             <ion-badge color="btngreen" item-end>{{ getLastParking() }}</ion-badge>
           </div>
-          <div *ngIf = 'rating == "No Available"'>
+          <div *ngIf = 'getRating() != "Available"'>
             <ion-badge color="btnred" item-end>{{ getLastParking() }}</ion-badge>
           </div>
         </ion-item>
-        <!--<ion-badge color="btngreen" item-end>{{ getLastParking() }}</ion-badge>-->
       </ion-item>
 
       <ion-item>
           <ion-icon name="time" item-start></ion-icon>
           Last Updated
-          <ion-badge color="light" item-end>{{ rating }}</ion-badge>
+          <ion-badge color="light" item-end>{{ getLastTime() }}</ion-badge>
         </ion-item>
     </ion-col>
   </ion-row>
