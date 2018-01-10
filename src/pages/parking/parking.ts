@@ -25,7 +25,7 @@ export class ParkingPage {
   hoursFormatted = this.hours < 10 ? '0' + this.hours : this.hours;
   minutes = this.today.getMinutes() < 10 ? '0' + this.today.getMinutes() : this.today.getMinutes();
 
-  time = this.hoursFormatted + ':' + this.minutes + this.am_pm;
+  time = this.hoursFormatted + ':' + this.minutes + ':' +  ' ' + this.am_pm;
   timeStamp = this.date + ' ' + this.time;
 
 
