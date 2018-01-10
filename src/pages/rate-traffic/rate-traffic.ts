@@ -14,13 +14,21 @@ export class RateTrafficPage {
   rateTrafficInfo: any;
   trafficStatus: any;
   location: any;
+
   dbCategory: any[] = [];
   dbTraffic: any[] = [];
   dbTime: any[] = [];
-  lastTraffic: any;
+
+  lastTraffic = "";
   lastTime: any;
   rating: any;
   test: any;
+
+  session: any;
+  dbFName: any[] = [];
+  dbLName: any[] = [];
+  fName: any;
+  lName: any;
 
   date = (this.today.getMonth() + 1) + '/' + this.today.getDate() + '/' + this.today.getFullYear();
   hours = this.today.getHours() <= 12 ? this.today.getHours() : this.today.getHours() - 12;
@@ -33,6 +41,16 @@ export class RateTrafficPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase) {
     this.trafficStatus = this.firebase.getRateTraffic();
+    this.session = this.firebase.getSession();
+
+    var j = 0;
+    this.session.subscribe(snapshots => {
+      snapshots.forEach(snapshot => {
+        this.dbFName[j] = snapshot.val().fName;
+        this.dbLName[j] = snapshot.val().lName;
+        j++;
+      });
+    });
 
     var i = 0;
     this.trafficStatus.subscribe(snapshots => {
@@ -43,6 +61,21 @@ export class RateTrafficPage {
         i++;
       });
     });
+
+    this.getUser();
+  }
+
+  addRateTraffic(info) {
+    this.getUser();
+    this.rateTrafficInfo = {
+      "category": 'Traffic',
+      "notifDetail": info + ' Traffic: ' + 'Perdices',
+      "timeStamp": this.timeStamp,
+      "fName": this.fName,
+      "lName": this.lName
+    };
+     console.log(info); 
+     this.firebase.addRateTraffic(this.rateTrafficInfo);
   }
 
   getLastTraffic() {
@@ -63,35 +96,37 @@ export class RateTrafficPage {
     return this.lastTime;
   }
 
-  addRateTraffic(info) {
-    this.rateTrafficInfo = {
-      "category": 'Traffic',
-      "notifDetail": info + ' Traffic: ' + 'Perdices',
-      "timeStamp": this.timeStamp
-    };
-     console.log(info); 
-     this.firebase.addRateTraffic(this.rateTrafficInfo);
-  }
-
   getRating(){
+    var rate;
     for(var i = 0; i<this.dbTraffic.length; i++) {
       if(this.dbCategory[i] == 'Traffic'){
        this.lastTraffic = this.dbTraffic[i];
       }
     }
-    /*if(this.lastTraffic.startsWith("Light")){
-      //console.log("here2");
+    this.rate();
+    return this.rating;
+  }
+  
+  rate(){
+    if(this.lastTraffic.startsWith("Light")){
       this.rating = this.lastTraffic.slice(0, 5);
-      console.log(this.rating);
     }
-    /*
     else if(this.lastTraffic.startsWith("Moderate")){
       this.rating = this.lastTraffic.slice(0, 8);
     }
     else if(this.lastTraffic.startsWith("Heavy")){
       this.rating = this.lastTraffic.slice(0, 5);
     }
-    return this.rating;*/
+  }
+
+  getUser(){
+    for(var i = 0; i<this.dbFName.length; i++) {
+       this.fName = this.dbFName[i];
+    }
+
+    for(var j = 0; j<this.dbLName.length; j++) {
+       this.lName = this.dbLName[j];
+    }
   }
 
 }

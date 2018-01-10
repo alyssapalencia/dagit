@@ -12,12 +12,20 @@ export class ParkingPage {
   rateParkingInfo: any;
   parkingStatus: any;
   location: any;
+
   dbCategory: any[] = [];
   dbParking: any[] = [];
   dbTime: any[] = [];
-  lastParking: any;
+
+  lastParking = "";
   lastTime: any;
   rating: any;
+
+  session: any;
+  dbFName: any[] = [];
+  dbLName: any[] = [];
+  fName: any;
+  lName: any;
 
   date = (this.today.getMonth() + 1) + '/' + this.today.getDate() + '/' + this.today.getFullYear();
   hours = this.today.getHours() <= 12 ? this.today.getHours() : this.today.getHours() - 12;
@@ -31,6 +39,16 @@ export class ParkingPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase) {
     this.parkingStatus = this.firebase.getParking();
+    this.session = this.firebase.getSession();
+
+    var j = 0;
+    this.session.subscribe(snapshots => {
+      snapshots.forEach(snapshot => {
+        this.dbFName[j] = snapshot.val().fName;
+        this.dbLName[j] = snapshot.val().lName;
+        j++;
+      });
+    });
 
     var i = 0;
     this.parkingStatus.subscribe(snapshots => {
@@ -41,6 +59,8 @@ export class ParkingPage {
         i++;
       });
     });
+
+    this.getUser();
   }
 
   ionViewDidLoad() {
@@ -48,10 +68,13 @@ export class ParkingPage {
   }
 
   addParking(info) {
+    this.getUser();
     this.rateParkingInfo = {
       "category": 'Parking',
       "notifDetail": info + ' Parking: ' + 'Perdices',
-      "timeStamp": this.timeStamp
+      "timeStamp": this.timeStamp,
+      "fName": this.fName,
+      "lName": this.lName
     };
      console.log(info); 
      this.firebase.addParking(this.rateParkingInfo);
@@ -81,12 +104,26 @@ export class ParkingPage {
        this.lastParking = this.dbParking[i];
       }
     }
+    this.rate();
+    return this.rating;
+  }
+
+  rate(){
     if(this.lastParking.startsWith("Available")){
       this.rating = this.lastParking.slice(0, 9);
     }
     else if(this.lastParking.startsWith("No Available")){
       this.rating = this.lastParking.slice(0, 12);
     }
-    return this.rating;
+  }
+
+  getUser(){
+    for(var i = 0; i<this.dbFName.length; i++) {
+       this.fName = this.dbFName[i];
+    }
+
+    for(var j = 0; j<this.dbLName.length; j++) {
+       this.lName = this.dbLName[j];
+    }
   }
 }
