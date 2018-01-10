@@ -15,7 +15,7 @@ export class ParkingPage {
   dbCategory: any[] = [];
   dbParking: any[] = [];
   dbTime: any[] = [];
-  lastParking: any;
+  lastParking = "";
   lastTime: any;
   rating: any;
 
@@ -81,12 +81,16 @@ export class ParkingPage {
        this.lastParking = this.dbParking[i];
       }
     }
+    this.rate();
+    return this.rating;
+  }
+
+  rate(){
     if(this.lastParking.startsWith("Available")){
       this.rating = this.lastParking.slice(0, 9);
     }
     else if(this.lastParking.startsWith("No Available")){
       this.rating = this.lastParking.slice(0, 12);
     }
-    return this.rating;
   }
 }

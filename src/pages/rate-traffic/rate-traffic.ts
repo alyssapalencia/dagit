@@ -17,7 +17,7 @@ export class RateTrafficPage {
   dbCategory: any[] = [];
   dbTraffic: any[] = [];
   dbTime: any[] = [];
-  lastTraffic: any;
+  lastTraffic = "";
   lastTime: any;
   rating: any;
   test: any;
@@ -45,6 +45,16 @@ export class RateTrafficPage {
     });
   }
 
+  addRateTraffic(info) {
+    this.rateTrafficInfo = {
+      "category": 'Traffic',
+      "notifDetail": info + ' Traffic: ' + 'Perdices',
+      "timeStamp": this.timeStamp
+    };
+     console.log(info); 
+     this.firebase.addRateTraffic(this.rateTrafficInfo);
+  }
+
   getLastTraffic() {
     for(var i = 0; i<this.dbTraffic.length; i++) {
      if(this.dbCategory[i] == 'Traffic'){
@@ -63,35 +73,27 @@ export class RateTrafficPage {
     return this.lastTime;
   }
 
-  addRateTraffic(info) {
-    this.rateTrafficInfo = {
-      "category": 'Traffic',
-      "notifDetail": info + ' Traffic: ' + 'Perdices',
-      "timeStamp": this.timeStamp
-    };
-     console.log(info); 
-     this.firebase.addRateTraffic(this.rateTrafficInfo);
-  }
-
   getRating(){
+    var rate;
     for(var i = 0; i<this.dbTraffic.length; i++) {
       if(this.dbCategory[i] == 'Traffic'){
        this.lastTraffic = this.dbTraffic[i];
       }
     }
-    /*if(this.lastTraffic.startsWith("Light")){
-      //console.log("here2");
+    this.rate();
+    return this.rating;
+  }
+  
+  rate(){
+    if(this.lastTraffic.startsWith("Light")){
       this.rating = this.lastTraffic.slice(0, 5);
-      console.log(this.rating);
     }
-    /*
     else if(this.lastTraffic.startsWith("Moderate")){
       this.rating = this.lastTraffic.slice(0, 8);
     }
     else if(this.lastTraffic.startsWith("Heavy")){
       this.rating = this.lastTraffic.slice(0, 5);
     }
-    return this.rating;*/
   }
 
 }
