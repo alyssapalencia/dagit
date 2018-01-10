@@ -34,5 +34,15 @@ export class Firebase{
         return this.dagit.list('/ACCOUNTS/ON_FIELD_TMO', {
           preserveSnapshot: true
         });
-      }
+    }
+    
+    addSession(sessionInfo){
+        this.dagit.list('/SESSIONS').push(sessionInfo);
+    }
+
+    getSession(){
+        return this.dagit.list('SESSIONS', {
+            preserveSnapshot: true
+        });
+    }
 }
