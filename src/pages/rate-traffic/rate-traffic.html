@@ -12,31 +12,33 @@
   <ion-row>
     <ion-col>
       <ion-item>
-        <ion-icon name="alert" item-start></ion-icon>
-        Current Status
-        <ion-item text-wrap>
+        <ion-avatar item-start>
+          <img src="/assets/imgs/alert.png">
+        </ion-avatar>
+        <h2>Current Status</h2>
             <div *ngIf = 'getRating() == "Light"'>
-              <ion-badge color="btngreen" item-end>{{ getLastTraffic() }}</ion-badge>
+              <p>{{ getLastTraffic() }}</p>
             </div>
             <div *ngIf = 'getRating() == "Moderate"'>
-              <ion-badge color="btnorange" item-end>{{ getLastTraffic() }}</ion-badge>
+              <p>{{ getLastTraffic() }}</p>
             </div>
             <div *ngIf = 'getRating() == "Heavy"'>
-                <ion-badge color="btnred" item-end>{{ getLastTraffic() }}</ion-badge>
+              <p>{{ getLastTraffic() }}</p>
             </div>
-          </ion-item>
       </ion-item>
 
       <ion-item>
-        <ion-icon name="time" item-start></ion-icon>
-        Last Updated
-        <ion-badge color="light" item-end>{{ getLastTime() }}</ion-badge>
+        <ion-avatar item-start>
+          <img src="/assets/imgs/time.png">
+        </ion-avatar>
+        <h2>Last Updated</h2>
+        <p>{{ getLastTime() }}</p>
       </ion-item>
     </ion-col>
   </ion-row>
   
   <ion-row>
-    <ion-col style="transform:translateY(35%);">
+    <ion-col>
       <button ion-button full large color="btngreen" (click)="addRateTraffic('Light')">LIGHT</button><br>
       <button ion-button full large color="btnorange" style="color:white;" (click)="addRateTraffic('Moderate')">MODERATE</button><br>
       <button ion-button full large color="btnred" (click)="addRateTraffic('Heavy')">HEAVY</button>
