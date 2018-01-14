@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Firebase } from '../../providers/firebase';
+import * as moment from 'moment';
 
 @IonicPage()
 @Component({
@@ -30,6 +31,7 @@ export class ParkingPage {
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase) {
+    console.log(moment().format('MM/DD/YYYY hh:mm:ss A').toString());
     this.parkingStatus = this.firebase.getParking();
 
     var i = 0;
@@ -51,7 +53,7 @@ export class ParkingPage {
     this.rateParkingInfo = {
       "category": 'Parking',
       "notifDetail": info + ' Parking: ' + 'Perdices',
-      "timeStamp": this.timeStamp
+      "timeStamp": moment().format('MM/DD/YYYY hh:mm:ss A').toString()
     };
      console.log(info); 
      this.firebase.addParking(this.rateParkingInfo);
