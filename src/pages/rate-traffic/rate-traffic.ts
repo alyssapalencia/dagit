@@ -72,7 +72,8 @@ export class RateTrafficPage {
       "notifDetail": info + ' Traffic: ' + 'Perdices',
       "timeStamp": this.timeStamp,
       "fName": this.fName,
-      "lName": this.lName
+      "lName": this.lName,
+      "sort": 0 - Date.now()
     };
      console.log(info); 
      this.firebase.addRateTraffic(this.rateTrafficInfo);

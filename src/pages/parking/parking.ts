@@ -15,7 +15,7 @@ export class ParkingPage {
   dbCategory: any[] = [];
   dbParking: any[] = [];
   dbTime: any[] = [];
-  lastParking: any;
+  lastParking = "";
   lastTime: any;
   rating: any;
 
@@ -51,7 +51,8 @@ export class ParkingPage {
     this.rateParkingInfo = {
       "category": 'Parking',
       "notifDetail": info + ' Parking: ' + 'Perdices',
-      "timeStamp": this.timeStamp
+      "timeStamp": this.timeStamp,
+      "sort": 0 - Date.now()
     };
      console.log(info); 
      this.firebase.addParking(this.rateParkingInfo);
