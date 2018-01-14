@@ -15,7 +15,7 @@ export class ParkingPage {
   dbCategory: any[] = [];
   dbParking: any[] = [];
   dbTime: any[] = [];
-  lastParking: any;
+  lastParking = '';
   lastTime: any;
   rating: any;
 
