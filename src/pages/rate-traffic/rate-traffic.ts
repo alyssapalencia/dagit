@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Firebase } from '../../providers/firebase';
-
+import * as moment from 'moment';
 
 @IonicPage()
 @Component({
@@ -40,6 +40,7 @@ export class RateTrafficPage {
   timeStamp = this.date + ' ' + this.time;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase) {
+    console.log(moment().format('MM/DD/YYYY hh:mm:ss A').toString());
     this.trafficStatus = this.firebase.getRateTraffic();
     this.session = this.firebase.getSession();
 
@@ -70,7 +71,7 @@ export class RateTrafficPage {
     this.rateTrafficInfo = {
       "category": 'Traffic',
       "notifDetail": info + ' Traffic: ' + 'Perdices',
-      "timeStamp": this.timeStamp,
+      "timeStamp": moment().format('MM/DD/YYYY hh:mm:ss A').toString(),
       "fName": this.fName,
       "lName": this.lName,
       "sort": 0 - Date.now()
