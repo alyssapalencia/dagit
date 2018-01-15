@@ -73,7 +73,8 @@ export class RateTrafficPage {
       "notifDetail": info + ' Traffic: ' + 'Perdices',
       "timeStamp": moment().format('MM/DD/YYYY hh:mm:ss A').toString(),
       "fName": this.fName,
-      "lName": this.lName
+      "lName": this.lName,
+      "sort": 0 - Date.now()
     };
      console.log(info); 
      this.firebase.addRateTraffic(this.rateTrafficInfo);
