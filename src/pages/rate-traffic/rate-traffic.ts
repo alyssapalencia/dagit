@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Firebase } from '../../providers/firebase';
 import * as moment from 'moment';
 
@@ -39,7 +39,7 @@ export class RateTrafficPage {
   time = this.hoursFormatted + ':' + this.minutes + ':' +  ' ' + this.am_pm;
   timeStamp = this.date + ' ' + this.time;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public alertCtrl: AlertController) {
     console.log(moment().format('MM/DD/YYYY hh:mm:ss A').toString());
     this.trafficStatus = this.firebase.getRateTraffic();
     this.session = this.firebase.getSession();
@@ -130,5 +130,4 @@ export class RateTrafficPage {
        this.lName = this.dbLName[j];
     }
   }
-
 }
