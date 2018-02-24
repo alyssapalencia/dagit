@@ -5,9 +5,10 @@ import { FirebaseListObservable } from 'angularfire2/database';
 
 @Injectable()
 export class Firebase{
-    
+    user: any;
+
     constructor (public dagit: AngularFireDatabase) {
-        
+        this.user = "Kurt Torregosa";
     }
 
     addRateTraffic(rateTraffic){
@@ -44,5 +45,9 @@ export class Firebase{
         return this.dagit.list('SESSIONS', {
             preserveSnapshot: true
         });
+    }
+
+    updateLocation(location) {
+        this.dagit.object('/LOCATION/' + this.user).update(location);
     }
 }

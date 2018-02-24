@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Firebase } from '../../providers/firebase';
+import { Geolocation } from '@ionic-native/geolocation';
+import { Observable } from 'rxjs/Rx';
 import * as moment from 'moment';
+
+declare var google;
 
 @IonicPage()
 @Component({
@@ -30,19 +34,18 @@ export class RateTrafficPage {
   fName: any;
   lName: any;
 
-  date = (this.today.getMonth() + 1) + '/' + this.today.getDate() + '/' + this.today.getFullYear();
-  hours = this.today.getHours() <= 12 ? this.today.getHours() : this.today.getHours() - 12;
-  am_pm = this.today.getHours() >= 12 ? 'PM' : 'AM';
-  hoursFormatted = this.hours < 10 ? '0' + this.hours : this.hours;
-  minutes = this.today.getMinutes() < 10 ? '0' + this.today.getMinutes() : this.today.getMinutes();
+  lat: any;
+  lng: any;
 
-  time = this.hoursFormatted + ':' + this.minutes + ':' +  ' ' + this.am_pm;
-  timeStamp = this.date + ' ' + this.time;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public alertCtrl: AlertController, private geolocation: Geolocation) {
     console.log(moment().format('MM/DD/YYYY hh:mm:ss A').toString());
     this.trafficStatus = this.firebase.getRateTraffic();
     this.session = this.firebase.getSession();
+
+    Observable.interval(5000)
+    .subscribe((val) => {
+      this.updateLocation();
+    });
 
     var j = 0;
     this.session.subscribe(snapshots => {
@@ -64,6 +67,17 @@ export class RateTrafficPage {
     });
 
     this.getUser();
+  }
+
+  updateLocation() {
+    this.geolocation.getCurrentPosition().then((position) => {
+      var location = {
+        "lat": position.coords.latitude,
+        "lng": position.coords.longitude
+      }
+      console.log(position.coords.latitude, position.coords.longitude);
+      this.firebase.updateLocation(location);
+    });
   }
 
   addRateTraffic(info) {

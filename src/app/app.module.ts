@@ -9,6 +9,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireModule } from 'angularfire2';
 import { Firebase } from './../providers/firebase';
+import { Geolocation } from '@ionic-native/geolocation';
 
 
 var dagitFirebase = {
@@ -38,6 +39,7 @@ var dagitFirebase = {
     StatusBar,
     SplashScreen,
     Firebase,
+    Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
