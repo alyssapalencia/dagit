@@ -8,6 +8,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireAuth } from 'angularfire2/auth';
 import { Firebase } from './../providers/firebase';
 import { Geolocation } from '@ionic-native/geolocation';
 
@@ -29,7 +31,8 @@ var dagitFirebase = {
     BrowserModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(dagitFirebase),
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    AngularFireAuthModule 
   ],
   bootstrap: [IonicApp],
   entryComponents: [

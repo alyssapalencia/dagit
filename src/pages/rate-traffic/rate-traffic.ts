@@ -17,11 +17,15 @@ export class RateTrafficPage {
   today = new Date();
   rateTrafficInfo: any;
   trafficStatus: any;
+  userDetail: any;
   location: any;
 
   dbCategory: any[] = [];
   dbTraffic: any[] = [];
   dbTime: any[] = [];
+  dbLocation: any[] = [];
+  dbLocLat: any[] = [];
+  dbLocLng: any[] = [];
 
   lastTraffic = "";
   lastTime: any;
@@ -41,10 +45,24 @@ export class RateTrafficPage {
     console.log(moment().format('MM/DD/YYYY hh:mm:ss A').toString());
     this.trafficStatus = this.firebase.getRateTraffic();
     this.session = this.firebase.getSession();
+    this.userDetail = this.firebase.getUserDetail();
 
     Observable.interval(5000)
     .subscribe((val) => {
       this.updateLocation();
+    });
+
+    var k = 0;
+    this.userDetail.subscribe(snapshot => {
+      snapshot.forEach(snap => {
+        this.dbLocation[k] = snap.val().location;
+        this.dbLocLat[k] = snap.val().locLat;
+        this.dbLocLng[k] = snap.val().locLng;
+        console.log(snap.val().location);
+        console.log(snap.val().locLat);
+        console.log(snap.val().locLng);
+        k++;
+      });
     });
 
     var j = 0;
@@ -73,7 +91,8 @@ export class RateTrafficPage {
     this.geolocation.getCurrentPosition().then((position) => {
       var location = {
         "lat": position.coords.latitude,
-        "lng": position.coords.longitude
+        "lng": position.coords.longitude,
+        "timeStamp": moment().format('MM/DD/YYYY hh:mm:ss A').toString()
       }
       console.log(position.coords.latitude, position.coords.longitude);
       this.firebase.updateLocation(location);
@@ -81,10 +100,13 @@ export class RateTrafficPage {
   }
 
   addRateTraffic(info) {
-    this.getUser();
+    this.getUser();             
+    var k = 0;
     this.rateTrafficInfo = {
       "category": 'Traffic',
-      "notifDetail": info + ' Traffic: ' + 'Perdices',
+      "notifDetail": info + ' Traffic: ' + this.dbLocation[k],
+      "locLat": this.dbLocLat[k],
+      "locLng": this.dbLocLng[k],
       "timeStamp": moment().format('MM/DD/YYYY hh:mm:ss A').toString(),
       "fName": this.fName,
       "lName": this.lName,

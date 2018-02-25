@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
 import 'rxjs/add/operator/map';
 import { FirebaseListObservable } from 'angularfire2/database';
 
@@ -7,8 +8,12 @@ import { FirebaseListObservable } from 'angularfire2/database';
 export class Firebase{
     user: any;
 
-    constructor (public dagit: AngularFireDatabase) {
-        this.user = "Kurt Torregosa";
+    constructor (public dagit: AngularFireDatabase, public angularFireAuth: AngularFireAuth) {
+        this.user = name;
+    }
+
+    setUser(name) {
+        this.user = this.angularFireAuth.auth.currentUser;
     }
 
     addRateTraffic(rateTraffic){

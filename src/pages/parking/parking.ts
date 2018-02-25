@@ -15,10 +15,16 @@ export class ParkingPage {
   today = new Date();
   rateParkingInfo: any;
   parkingStatus: any;
+  userDetail: any;
   location: any;
+
   dbCategory: any[] = [];
   dbParking: any[] = [];
   dbTime: any[] = [];
+  dbLocation: any[] = [];
+  dbLocLat: any[] = [];
+  dbLocLng: any[] = [];
+
   lastParking = '';
   lastTime: any;
   rating: any;
@@ -33,6 +39,17 @@ export class ParkingPage {
     console.log(moment().format('MM/DD/YYYY hh:mm:ss A').toString());
     this.parkingStatus = this.firebase.getParking();
     this.session = this.firebase.getSession();
+    this.userDetail = this.firebase.getUserDetail();
+
+    var k = 0;
+    this.userDetail.subscribe(snapshot => {
+      snapshot.forEach(snap => {
+        this.dbLocation[k] = snap.val().location;
+        this.dbLocLat[k] = snap.val().locLat;
+        this.dbLocLng[k] = snap.val().locLng;
+        k++;
+      });
+    });
 
     var j = 0;
     this.session.subscribe(snapshots => {
@@ -61,9 +78,12 @@ export class ParkingPage {
   }
 
   addParking(info) {
+    var k = 0;
     this.rateParkingInfo = {
       "category": 'Parking',
-      "notifDetail": info + ' Parking: ' + 'Perdices',
+      "notifDetail": info + ' Parking: ' + this.dbLocation[k],
+      "locLat": this.dbLocLat[k],
+      "locLng": this.dbLocLng[k],
       "timeStamp": moment().format('MM/DD/YYYY hh:mm:ss A').toString(),
       "fName": this.fName,
       "lName": this.lName,
