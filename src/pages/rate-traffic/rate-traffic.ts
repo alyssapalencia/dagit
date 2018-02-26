@@ -114,12 +114,10 @@ export class RateTrafficPage {
       "lName": this.lName,
       "sort": 0 - Date.now()
     };
-     console.log("bilat test"); 
      this.firebase.getMap().subscribe(snapshot => {
       snapshot.forEach(snap => {
-        console.log(snap.fName);
+        console.log("traffic log");
         if(snap.fName == this.fName) {
-          console.log("okay");
           var key = snap.$key;
           this.firebase.updateRateTraffic(this.rateTrafficInfo, key);
         }
@@ -128,7 +126,7 @@ export class RateTrafficPage {
         this.firebase.addRateTraffic(this.rateTrafficInfo);
       }
     });
-    
+    this.firebase.updateRateNotif(this.rateTrafficInfo);
   }
 
   getLastTraffic() {

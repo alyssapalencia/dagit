@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { Firebase } from '../../providers/firebase';
-import { ToastController } from 'ionic-angular';
+import { Geolocation } from '@ionic-native/geolocation';
+import { Observable } from 'rxjs/Rx';
+import * as moment from 'moment';
 
 @IonicPage()
 @Component({
@@ -22,8 +24,9 @@ export class LoginPage {
 
   sessionInfo: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public toastCtrl: ToastController, private geolocation: Geolocation) {
     this.userInfo = this.firebase.getUserDetail();
+
     var i = 0;
     this.userInfo.subscribe(snapshots => {
       snapshots.forEach(snapshot => {

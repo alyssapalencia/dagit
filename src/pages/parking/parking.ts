@@ -90,12 +90,11 @@ export class ParkingPage {
       "lName": this.lName,
       "sort": 0 - Date.now()
     };
-     console.log(info);
      this.firebase.getMap().subscribe(snapshot => {
        snapshot.forEach(snap => {
-         console.log(snap.fName);
+         console.log(snap);
          if(snap.fName == this.fName) {
-           console.log("parking okay");
+           console.log("parking log");
            var key = snap.$key;
            this.firebase.updateParking(this.rateParkingInfo, key);
          }
@@ -104,6 +103,7 @@ export class ParkingPage {
          this.firebase.addParking(this.rateParkingInfo);
        }
      });
+     this.firebase.updateParkingNotif(this.rateParkingInfo);
   }
 
   getLastParking() {
