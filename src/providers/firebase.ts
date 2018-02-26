@@ -18,6 +18,12 @@ export class Firebase{
 
     addRateTraffic(rateTraffic){
         this.dagit.list('/NOTIFICATIONS').push(rateTraffic);
+        this.dagit.list('/MAP').push(rateTraffic);
+    }
+
+    updateRateTraffic(rateTraffic, key){
+        this.dagit.list('/NOTIFICATIONS').push(rateTraffic);
+        this.dagit.object('/MAP/' + key).update(rateTraffic);
     }
 
     getRateTraffic(){
@@ -26,8 +32,18 @@ export class Firebase{
         });
     }
 
+    getMap() {
+        return this.dagit.list('/MAP');
+    }
+
     addParking(parkingStat){
         this.dagit.list('/NOTIFICATIONS').push(parkingStat);
+        this.dagit.list('/MAP').push(parkingStat);
+    }
+
+    updateParking(parkingStat, key) {
+        this.dagit.list('/NOTIFICATIONS').push(parkingStat);
+        this.dagit.object('/MAP/' + key).update(parkingStat);
     }
 
     getParking(){

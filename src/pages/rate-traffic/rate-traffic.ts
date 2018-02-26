@@ -17,6 +17,7 @@ export class RateTrafficPage {
   today = new Date();
   rateTrafficInfo: any;
   trafficStatus: any;
+  addUpdateInfo: any;
   userDetail: any;
   location: any;
 
@@ -47,11 +48,11 @@ export class RateTrafficPage {
     this.session = this.firebase.getSession();
     this.userDetail = this.firebase.getUserDetail();
 
-    Observable.interval(5000)
+    /*Observable.interval(5000)
     .subscribe((val) => {
       this.updateLocation();
-    });
-
+    });*/
+    
     var k = 0;
     this.userDetail.subscribe(snapshot => {
       snapshot.forEach(snap => {
@@ -100,10 +101,11 @@ export class RateTrafficPage {
   }
 
   addRateTraffic(info) {
-    this.getUser();             
+    this.getUser();       
     var k = 0;
     this.rateTrafficInfo = {
       "category": 'Traffic',
+      "subcategory": info,
       "notifDetail": info + ' Traffic: ' + this.dbLocation[k],
       "locLat": this.dbLocLat[k],
       "locLng": this.dbLocLng[k],
@@ -112,8 +114,21 @@ export class RateTrafficPage {
       "lName": this.lName,
       "sort": 0 - Date.now()
     };
-     console.log(info); 
-     this.firebase.addRateTraffic(this.rateTrafficInfo);
+     console.log("bilat test"); 
+     this.firebase.getMap().subscribe(snapshot => {
+      snapshot.forEach(snap => {
+        console.log(snap.fName);
+        if(snap.fName == this.fName) {
+          console.log("okay");
+          var key = snap.$key;
+          this.firebase.updateRateTraffic(this.rateTrafficInfo, key);
+        }
+      });
+      if(snapshot.length == 0) {
+        this.firebase.addRateTraffic(this.rateTrafficInfo);
+      }
+    });
+    
   }
 
   getLastTraffic() {
