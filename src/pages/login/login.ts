@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { Firebase } from '../../providers/firebase';
+import { FirebaseApp } from 'angularfire2';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Observable } from 'rxjs/Rx';
 import * as moment from 'moment';
@@ -21,10 +22,11 @@ export class LoginPage {
   dbLName: any[] = [];
   lastFName: any;
   lastLName: any;
+  enabled: any[] = [];
 
   sessionInfo: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public toastCtrl: ToastController, private geolocation: Geolocation) {
+  constructor(public firebaseApp: FirebaseApp, public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public toastCtrl: ToastController, private geolocation: Geolocation) {
     this.userInfo = this.firebase.getUserDetail();
 
     var i = 0;
@@ -33,7 +35,8 @@ export class LoginPage {
         this.confirmUser[i] = snapshot.val().username;
         this.confirmPass[i] = snapshot.val().password;
         this.dbFName[i] = snapshot.val().fName;
-        this.dbLName[i] = snapshot.val().lName
+        this.dbLName[i] = snapshot.val().lName;
+        this.enabled[i] = snapshot.val().enabled;
         i++;
       });
     });
@@ -48,18 +51,28 @@ export class LoginPage {
     for(var i=0; i<this.confirmUser.length; i++){
       if(this.tempuser == this.confirmUser[i]){
         if(this.temppass == this.confirmPass[i]){
-          this.lastFName = this.dbFName[i];
-          this.lastLName = this.dbLName[i];
-          this.addSession();
-          check=true;
-          console.log("logged in");
-          this.navCtrl.setRoot('TabsPage');
-          this.navCtrl.popToRoot();
-          let toast = this.toastCtrl.create({
-          message: 'Login successful.',
-            duration: 2000,
-          });
-          toast.present();
+          check = true;
+          if(this.enabled[i] == "yes"){
+            this.lastFName = this.dbFName[i];
+            this.lastLName = this.dbLName[i];
+            this.addSession();
+            console.log("logged in");
+            this.navCtrl.setRoot('TabsPage');
+            this.navCtrl.popToRoot();
+            let toast = this.toastCtrl.create({
+            message: 'Login successful.',
+              duration: 2000,
+            });
+            toast.present();
+          }
+          else
+          {
+            let toast = this.toastCtrl.create({
+              message: 'Account is disabled',
+                duration: 2000,
+              });
+              toast.present();
+          }
         }
       }
     }
