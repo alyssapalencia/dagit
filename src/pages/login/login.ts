@@ -25,6 +25,7 @@ export class LoginPage {
   sessionInfo: any;
 
   constructor(public firebaseApp: FirebaseApp, public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public toastCtrl: ToastController) {
+    //new
     this.firebaseApp.database().ref("ACCOUNTS/ON_FIELD_TMO").on('value', snapshot => {
       this.userInfo = this.firebase.getUserDetail();
       var i = 0;
