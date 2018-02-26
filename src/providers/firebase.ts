@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
 import 'rxjs/add/operator/map';
 import { FirebaseListObservable } from 'angularfire2/database';
 
 @Injectable()
 export class Firebase{
-    
-    constructor (public dagit: AngularFireDatabase) {
-        
+    user: any;
+
+    constructor (public dagit: AngularFireDatabase, public angularFireAuth: AngularFireAuth) {
+        this.user = name;
+    }
+
+    setUser(name) {
+        this.user = this.angularFireAuth.auth.currentUser;
     }
 
     addRateTraffic(rateTraffic){
@@ -44,5 +50,9 @@ export class Firebase{
         return this.dagit.list('SESSIONS', {
             preserveSnapshot: true
         });
+    }
+
+    updateLocation(location) {
+        this.dagit.object('/LOCATION/' + this.user).update(location);
     }
 }

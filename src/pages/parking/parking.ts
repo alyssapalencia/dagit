@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Firebase } from '../../providers/firebase';
+import { Geolocation } from '@ionic-native/geolocation';
 import * as moment from 'moment';
+
+declare var google;
 
 @IonicPage()
 @Component({
@@ -12,10 +15,16 @@ export class ParkingPage {
   today = new Date();
   rateParkingInfo: any;
   parkingStatus: any;
+  userDetail: any;
   location: any;
+
   dbCategory: any[] = [];
   dbParking: any[] = [];
   dbTime: any[] = [];
+  dbLocation: any[] = [];
+  dbLocLat: any[] = [];
+  dbLocLng: any[] = [];
+
   lastParking = '';
   lastTime: any;
   rating: any;
@@ -26,20 +35,21 @@ export class ParkingPage {
   fName: any;
   lName: any;
 
-  date = (this.today.getMonth() + 1) + '/' + this.today.getDate() + '/' + this.today.getFullYear();
-  hours = this.today.getHours() <= 12 ? this.today.getHours() : this.today.getHours() - 12;
-  am_pm = this.today.getHours() >= 12 ? 'PM' : 'AM';
-  hoursFormatted = this.hours < 10 ? '0' + this.hours : this.hours;
-  minutes = this.today.getMinutes() < 10 ? '0' + this.today.getMinutes() : this.today.getMinutes();
-
-  time = this.hoursFormatted + ':' + this.minutes + ':' +  ' ' + this.am_pm;
-  timeStamp = this.date + ' ' + this.time;
-
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, private geolocation: Geolocation) {
     console.log(moment().format('MM/DD/YYYY hh:mm:ss A').toString());
     this.parkingStatus = this.firebase.getParking();
     this.session = this.firebase.getSession();
+    this.userDetail = this.firebase.getUserDetail();
+
+    var k = 0;
+    this.userDetail.subscribe(snapshot => {
+      snapshot.forEach(snap => {
+        this.dbLocation[k] = snap.val().location;
+        this.dbLocLat[k] = snap.val().locLat;
+        this.dbLocLng[k] = snap.val().locLng;
+        k++;
+      });
+    });
 
     var j = 0;
     this.session.subscribe(snapshots => {
@@ -68,13 +78,16 @@ export class ParkingPage {
   }
 
   addParking(info) {
+    var k = 0;
     this.rateParkingInfo = {
       "category": 'Parking',
-      "notifDetail": info + ' Parking: ' + 'Perdices',
+      "notifDetail": info + ' Parking: ' + this.dbLocation[k],
+      "locLat": this.dbLocLat[k],
+      "locLng": this.dbLocLng[k],
+      "timeStamp": moment().format('MM/DD/YYYY hh:mm:ss A').toString(),
       "fName": this.fName,
       "lName": this.lName,
-      "sort": 0 - Date.now(),
-      "timeStamp": moment().format('MM/DD/YYYY hh:mm:ss A').toString()
+      "sort": 0 - Date.now()
     };
      console.log(info); 
      this.firebase.addParking(this.rateParkingInfo);

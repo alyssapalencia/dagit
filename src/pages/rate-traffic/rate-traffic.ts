@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Firebase } from '../../providers/firebase';
+import { Geolocation } from '@ionic-native/geolocation';
+import { Observable } from 'rxjs/Rx';
 import * as moment from 'moment';
+
+declare var google;
 
 @IonicPage()
 @Component({
@@ -13,11 +17,15 @@ export class RateTrafficPage {
   today = new Date();
   rateTrafficInfo: any;
   trafficStatus: any;
+  userDetail: any;
   location: any;
 
   dbCategory: any[] = [];
   dbTraffic: any[] = [];
   dbTime: any[] = [];
+  dbLocation: any[] = [];
+  dbLocLat: any[] = [];
+  dbLocLng: any[] = [];
 
   lastTraffic = "";
   lastTime: any;
@@ -30,19 +38,32 @@ export class RateTrafficPage {
   fName: any;
   lName: any;
 
-  date = (this.today.getMonth() + 1) + '/' + this.today.getDate() + '/' + this.today.getFullYear();
-  hours = this.today.getHours() <= 12 ? this.today.getHours() : this.today.getHours() - 12;
-  am_pm = this.today.getHours() >= 12 ? 'PM' : 'AM';
-  hoursFormatted = this.hours < 10 ? '0' + this.hours : this.hours;
-  minutes = this.today.getMinutes() < 10 ? '0' + this.today.getMinutes() : this.today.getMinutes();
+  lat: any;
+  lng: any;
 
-  time = this.hoursFormatted + ':' + this.minutes + ':' +  ' ' + this.am_pm;
-  timeStamp = this.date + ' ' + this.time;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public alertCtrl: AlertController, private geolocation: Geolocation) {
     console.log(moment().format('MM/DD/YYYY hh:mm:ss A').toString());
     this.trafficStatus = this.firebase.getRateTraffic();
     this.session = this.firebase.getSession();
+    this.userDetail = this.firebase.getUserDetail();
+
+    Observable.interval(5000)
+    .subscribe((val) => {
+      this.updateLocation();
+    });
+
+    var k = 0;
+    this.userDetail.subscribe(snapshot => {
+      snapshot.forEach(snap => {
+        this.dbLocation[k] = snap.val().location;
+        this.dbLocLat[k] = snap.val().locLat;
+        this.dbLocLng[k] = snap.val().locLng;
+        console.log(snap.val().location);
+        console.log(snap.val().locLat);
+        console.log(snap.val().locLng);
+        k++;
+      });
+    });
 
     var j = 0;
     this.session.subscribe(snapshots => {
@@ -66,11 +87,26 @@ export class RateTrafficPage {
     this.getUser();
   }
 
+  updateLocation() {
+    this.geolocation.getCurrentPosition().then((position) => {
+      var location = {
+        "lat": position.coords.latitude,
+        "lng": position.coords.longitude,
+        "timeStamp": moment().format('MM/DD/YYYY hh:mm:ss A').toString()
+      }
+      console.log(position.coords.latitude, position.coords.longitude);
+      this.firebase.updateLocation(location);
+    });
+  }
+
   addRateTraffic(info) {
-    this.getUser();
+    this.getUser();             
+    var k = 0;
     this.rateTrafficInfo = {
       "category": 'Traffic',
-      "notifDetail": info + ' Traffic: ' + 'Perdices',
+      "notifDetail": info + ' Traffic: ' + this.dbLocation[k],
+      "locLat": this.dbLocLat[k],
+      "locLng": this.dbLocLng[k],
       "timeStamp": moment().format('MM/DD/YYYY hh:mm:ss A').toString(),
       "fName": this.fName,
       "lName": this.lName,
@@ -130,5 +166,4 @@ export class RateTrafficPage {
        this.lName = this.dbLName[j];
     }
   }
-
 }
