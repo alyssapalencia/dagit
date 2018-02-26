@@ -27,17 +27,19 @@ export class LoginPage {
   sessionInfo: any;
 
   constructor(public firebaseApp: FirebaseApp, public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public toastCtrl: ToastController, private geolocation: Geolocation) {
-    this.userInfo = this.firebase.getUserDetail();
-
-    var i = 0;
-    this.userInfo.subscribe(snapshots => {
-      snapshots.forEach(snapshot => {
-        this.confirmUser[i] = snapshot.val().username;
-        this.confirmPass[i] = snapshot.val().password;
-        this.dbFName[i] = snapshot.val().fName;
-        this.dbLName[i] = snapshot.val().lName;
-        this.enabled[i] = snapshot.val().enabled;
-        i++;
+    //new
+    this.firebaseApp.database().ref("ACCOUNTS/ON_FIELD_TMO").on('value', snapshot => {
+      this.userInfo = this.firebase.getUserDetail();
+      var i = 0;
+      this.userInfo.subscribe(snapshots => {
+        snapshots.forEach(snapshot => {
+          this.confirmUser[i] = snapshot.val().username;
+          this.confirmPass[i] = snapshot.val().password;
+          this.dbFName[i] = snapshot.val().fName;
+          this.dbLName[i] = snapshot.val().lName
+          this.enabled[i] = snapshot.val().enabled;
+          i++;
+        });
       });
     });
   }
