@@ -92,9 +92,8 @@ export class ParkingPage {
     };
      this.firebase.getMap().subscribe(snapshot => {
        snapshot.forEach(snap => {
-         console.log(snap);
+         console.log("parking log");
          if(snap.fName == this.fName) {
-           console.log("parking log");
            var key = snap.$key;
            this.firebase.updateParking(this.rateParkingInfo, key);
          }
