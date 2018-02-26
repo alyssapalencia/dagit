@@ -81,6 +81,7 @@ export class ParkingPage {
     var k = 0;
     this.rateParkingInfo = {
       "category": 'Parking',
+      "subcategory": info,
       "notifDetail": info + ' Parking: ' + this.dbLocation[k],
       "locLat": this.dbLocLat[k],
       "locLng": this.dbLocLng[k],
@@ -89,8 +90,20 @@ export class ParkingPage {
       "lName": this.lName,
       "sort": 0 - Date.now()
     };
-     console.log(info); 
-     this.firebase.addParking(this.rateParkingInfo);
+     console.log(info);
+     this.firebase.getMap().subscribe(snapshot => {
+       snapshot.forEach(snap => {
+         console.log(snap.fName);
+         if(snap.fName == this.fName) {
+           console.log("parking okay");
+           var key = snap.$key;
+           this.firebase.updateParking(this.rateParkingInfo, key);
+         }
+       });
+       if(snapshot.length == 0) {
+         this.firebase.addParking(this.rateParkingInfo);
+       }
+     });
   }
 
   getLastParking() {
