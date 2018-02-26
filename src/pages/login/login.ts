@@ -19,6 +19,7 @@ export class LoginPage {
   dbLName: any[] = [];
   lastFName: any;
   lastLName: any;
+  enabled: any[] = [];
 
   sessionInfo: any;
 
@@ -31,6 +32,7 @@ export class LoginPage {
         this.confirmPass[i] = snapshot.val().password;
         this.dbFName[i] = snapshot.val().fName;
         this.dbLName[i] = snapshot.val().lName
+        this.enabled[i] = snapshot.val().enabled;
         i++;
       });
     });
@@ -45,18 +47,28 @@ export class LoginPage {
     for(var i=0; i<this.confirmUser.length; i++){
       if(this.tempuser == this.confirmUser[i]){
         if(this.temppass == this.confirmPass[i]){
-          this.lastFName = this.dbFName[i];
-          this.lastLName = this.dbLName[i];
-          this.addSession();
-          check=true;
-          console.log("logged in");
-          this.navCtrl.setRoot('TabsPage');
-          this.navCtrl.popToRoot();
-          let toast = this.toastCtrl.create({
-          message: 'Login successful.',
-            duration: 2000,
-          });
-          toast.present();
+          check = true;
+          if(this.enabled[i] == "yes"){
+            this.lastFName = this.dbFName[i];
+            this.lastLName = this.dbLName[i];
+            this.addSession();
+            console.log("logged in");
+            this.navCtrl.setRoot('TabsPage');
+            this.navCtrl.popToRoot();
+            let toast = this.toastCtrl.create({
+            message: 'Login successful.',
+              duration: 2000,
+            });
+            toast.present();
+          }
+          else
+          {
+            let toast = this.toastCtrl.create({
+              message: 'Account is disabled',
+                duration: 2000,
+              });
+              toast.present();
+          }
         }
       }
     }
