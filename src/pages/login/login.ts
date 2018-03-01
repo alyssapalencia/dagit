@@ -6,39 +6,53 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { Observable } from 'rxjs/Rx';
 import * as moment from 'moment';
 
+declare var google;
+
 @IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
 })
 export class LoginPage {
+  // USER ACCOUNT
   tempuser: any;
   temppass: any;
   temp: any;
   userInfo: any;
   confirmUser: any[] = [];
   confirmPass: any[] = [];
+  enabled: any[] = [];
+
+  // FETCH DB
   dbFName: any[] = [];
   dbLName: any[] = [];
   dbLocation: any[] = [];
   dbLatitude: any[] = [];
   dbLongitude: any[] = [];
+  dbKey: any[] = [];
+  // TRACKER
+  //latLng: any;
+  latitude: any;
+  longitude: any;
+
+  // LAST UPDATE
   lastFName: any;
   lastLName: any;
   lastLocation: any;
   lastLatitude: any;
   lastLongitude: any;
-  enabled: any[] = [];
-
   sessionInfo: any;
+  watch;
+  userkey;
+  marker;
+  usernode;
 
   constructor(public firebaseApp: FirebaseApp, public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public toastCtrl: ToastController, private geolocation: Geolocation) {
-    //new
-    this.firebaseApp.database().ref("ACCOUNTS/ON_FIELD_TMO").on('value', snapshot => {
       this.userInfo = this.firebase.getUserDetail();
       var i = 0;
       this.userInfo.subscribe(snapshots => {
         snapshots.forEach(snapshot => {
+          this.dbKey[i] = snapshot.key
           this.confirmUser[i] = snapshot.val().username;
           this.confirmPass[i] = snapshot.val().password;
           this.dbFName[i] = snapshot.val().fName;
@@ -50,20 +64,52 @@ export class LoginPage {
           i++;
         });
       });
-    });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
   }
 
+  // USER LOCATION
+  watchUserLocation(uid){
+    const watchOptions = {
+    	enableHighAccurary: true,
+    	maximumAge:5000,
+    	timeout: 5000
+    }
+		this.watch = this.geolocation.watchPosition(watchOptions).subscribe(pos => {
+			if(pos.coords != undefined){
+				this.firebaseApp.database().ref("LOCATION").child(uid).update({
+					lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+          timeStamp: moment().format('MMMM Do YYYY, hh:mm:ss A').toString(),
+          fName: this.lastFName,
+          lName: this.lastLName
+				});
+			}
+		}); 
+  }
+
+  updateMarkerPosition(location) {
+    this.marker.setPosition({
+      "lat": location.latLng.lat(),
+      "lng": location.latLng.lng(),
+      "timeStamp": moment().format('MMMM Do YYYY hh:mm:ss A').toString()
+    });
+    this.firebase.updateLocation(location);
+  }
+
+  // CHECK CREDENTIALS
   checkAuth(){
     var check=false;
-    for(var i=0; i<this.confirmUser.length; i++){
+    for(var i=0; i<this.confirmUser.length; i++)
+    {
       if(this.tempuser == this.confirmUser[i]){
         if(this.temppass == this.confirmPass[i]){
           check = true;
           if(this.enabled[i] == "yes"){
+            this.userkey = this.dbKey[i];
+            this.watchUserLocation(this.userkey);
             this.lastFName = this.dbFName[i];
             this.lastLName = this.dbLName[i];
             this.lastLocation = this.dbLocation[i];

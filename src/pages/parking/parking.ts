@@ -95,9 +95,9 @@ export class ParkingPage {
     this.firebase.addParking(this.rateParkingInfo);
 
     this.mapUpdate = {
-      "platitude": this.latitude,
-      "plongitude": this.longitude,
-      "parkingRating": info + ' Parking',
+      "platitude": this.latitude + 0.0001,
+      "plongitude": this.longitude + 0.0001,
+      "parkingAvailability": info + ' Parking',
       "parkingTimeStamp": moment().format('MMMM Do YYYY, hh:mm:ss A').toString(),
       "pFName": this.fName,
       "pLName": this.lName

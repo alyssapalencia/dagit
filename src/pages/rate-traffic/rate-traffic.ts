@@ -48,7 +48,9 @@ export class RateTrafficPage {
   lastTime: any;
   rating: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public alertCtrl: AlertController, private geolocation: Geolocation, private app: App, public toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, 
+    public navParams: NavParams, public firebase: Firebase, public alertCtrl: AlertController, 
+    private geolocation: Geolocation, private app: App, public toastCtrl: ToastController) {
     this.trafficStatus = this.firebase.getRateTraffic();
     this.session = this.firebase.getSession();
     this.userDetail = this.firebase.getUserDetail();
@@ -78,18 +80,6 @@ export class RateTrafficPage {
     this.getUser();
   }
 
-  updateLocation() {
-    this.geolocation.getCurrentPosition().then((position) => {
-      var location = {
-        "lat": position.coords.latitude,
-        "lng": position.coords.longitude,
-        "timeStamp": moment().format('MMMM Do YYYY, hh:mm:ss A').toString()
-      }
-      console.log(position.coords.latitude, position.coords.longitude);
-      this.firebase.updateLocation(location);
-    });
-  }
-
   addRateTraffic(info) {
     this.getUser();
 
@@ -113,24 +103,6 @@ export class RateTrafficPage {
       "tLName": this.lName
     };
     this.firebase.updateMapData(this.location, this.mapUpdate);
-
-
-    /*console.log(this.dbLocation[k]);
-    this.firebase.getMapTraffic().subscribe(snapshot => {
-      snapshot.forEach(snap => {
-        console.log("log traffic");
-        if(snap.tfName == this.fName) {
-          var key = snap.$key;
-          this.firebase.updateRateTraffic(this.updateTrafficInfo, location);
-        }
-        console.log(this.location);
-      });
-      if(snapshot.length == 0) {
-        this.firebase.addRateTraffic(this.updateTrafficInfo);
-      }
-      console.log(snapshot.length);
-    });
-    this.firebase.updateRateNotif(this.rateTrafficInfo);*/
   }
 
   getLastTraffic() {
