@@ -16,16 +16,13 @@ export class Firebase{
         this.user = this.angularFireAuth.auth.currentUser;
     }
 
+    // TRAFFIC 
     addRateTraffic(rateTraffic){
-        this.dagit.list('/MAP').push(rateTraffic);
-    }
-
-    updateRateTraffic(rateTraffic, key){
-        this.dagit.object('/MAP/TRAFFIC/' + key).update(rateTraffic);
-    }
-
-    updateRateNotif(rateTraffic) {
         this.dagit.list('/NOTIFICATIONS').push(rateTraffic);
+    }
+
+    updateRateTraffic(rateTraffic, location){
+        this.dagit.object('/MAP/' + location).update(rateTraffic);
     }
 
     getRateTraffic(){
@@ -34,20 +31,13 @@ export class Firebase{
         });
     }
 
-    getMap() {
-        return this.dagit.list('/MAP');
-    }
-
+    // PARKING
     addParking(parkingStat){
-        this.dagit.list('/MAP').push(parkingStat);
-    }
-
-    updateParking(parkingStat, key) {
-        this.dagit.object('/MAP/PARKING/' + key).update(parkingStat);
-    }
-
-    updateParkingNotif(parkingStat) {
         this.dagit.list('/NOTIFICATIONS').push(parkingStat);
+    }
+
+    updateParking(parkingStat, location) {
+        this.dagit.object('/MAP/' + location).update(parkingStat);
     }
 
     getParking(){
@@ -55,6 +45,14 @@ export class Firebase{
             preserveSnapshot: true
         });
     }
+
+    //MAP
+
+    updateMapData(location, update) {
+        this.dagit.object('/MAP/' + location).update(update);
+    }
+
+    // USER DETAILS
 
     getUserDetail(){
         return this.dagit.list('/ACCOUNTS/ON_FIELD_TMO', {

@@ -20,8 +20,14 @@ export class LoginPage {
   confirmPass: any[] = [];
   dbFName: any[] = [];
   dbLName: any[] = [];
+  dbLocation: any[] = [];
+  dbLatitude: any[] = [];
+  dbLongitude: any[] = [];
   lastFName: any;
   lastLName: any;
+  lastLocation: any;
+  lastLatitude: any;
+  lastLongitude: any;
   enabled: any[] = [];
 
   sessionInfo: any;
@@ -36,7 +42,10 @@ export class LoginPage {
           this.confirmUser[i] = snapshot.val().username;
           this.confirmPass[i] = snapshot.val().password;
           this.dbFName[i] = snapshot.val().fName;
-          this.dbLName[i] = snapshot.val().lName
+          this.dbLName[i] = snapshot.val().lName;
+          this.dbLocation[i] = snapshot.val().location;
+          this.dbLatitude[i] = snapshot.val().locLat;
+          this.dbLongitude[i] = snapshot.val().locLng;
           this.enabled[i] = snapshot.val().enabled;
           i++;
         });
@@ -57,6 +66,9 @@ export class LoginPage {
           if(this.enabled[i] == "yes"){
             this.lastFName = this.dbFName[i];
             this.lastLName = this.dbLName[i];
+            this.lastLocation = this.dbLocation[i];
+            this.lastLatitude = this.dbLatitude[i];
+            this.lastLongitude = this.dbLongitude[i];
             this.addSession();
             console.log("logged in");
             this.navCtrl.setRoot('TabsPage');
@@ -89,9 +101,15 @@ export class LoginPage {
   }
 
   addSession(){
+    console.log(this.lastLocation);
+    console.log(this.lastLatitude);
+    console.log(this.lastLongitude);
     this.sessionInfo = {
       "fName": this.lastFName,
-      "lName": this.lastLName
+      "lName": this.lastLName,
+      "location": this.lastLocation,
+      "latitude": this.lastLatitude,
+      "longitude": this.lastLongitude
     };
     this.firebase.addSession(this.sessionInfo);
   }

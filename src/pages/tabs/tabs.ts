@@ -11,7 +11,6 @@ export class TabsPage {
 
   tab1Root = 'RateTrafficPage';
   tab2Root = 'ParkingPage';
-  tab3Root = 'LogoutPage';
 
   constructor() {
 

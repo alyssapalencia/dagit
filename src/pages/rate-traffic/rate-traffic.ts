@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, App, ToastController } from 'ionic-angular';
 import { Firebase } from '../../providers/firebase';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Observable } from 'rxjs/Rx';
 import * as moment from 'moment';
+
+// IMPORTED PAGES
+import { LoginPage } from '../login/login';
 
 declare var google;
 
@@ -16,61 +19,48 @@ export class RateTrafficPage {
 
   today = new Date();
   rateTrafficInfo: any;
+  //updateTrafficInfo: any;
   trafficStatus: any;
-  addUpdateInfo: any;
+  mapUpdate: any;
   userDetail: any;
-  location: any;
 
+  // USER DETAILS
+  session: any;
+  fName: any;
+  lName: any;
+  location: any;
+  latitude: any;
+  longitude: any;
+  
+  // DB FETCH
+  dbUsers: any[] = [];
   dbCategory: any[] = [];
   dbTraffic: any[] = [];
   dbTime: any[] = [];
+  dbFName: any[] = [];
+  dbLName: any[] = [];
   dbLocation: any[] = [];
   dbLocLat: any[] = [];
   dbLocLng: any[] = [];
 
+  // LATEST UPDATE
   lastTraffic = "";
   lastTime: any;
   rating: any;
-  test: any;
 
-  session: any;
-  dbFName: any[] = [];
-  dbLName: any[] = [];
-  fName: any;
-  lName: any;
-
-  lat: any;
-  lng: any;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public alertCtrl: AlertController, private geolocation: Geolocation) {
-    console.log(moment().format('MM/DD/YYYY hh:mm:ss A').toString());
+  constructor(public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public alertCtrl: AlertController, private geolocation: Geolocation, private app: App, public toastCtrl: ToastController) {
     this.trafficStatus = this.firebase.getRateTraffic();
     this.session = this.firebase.getSession();
     this.userDetail = this.firebase.getUserDetail();
-
-    /*Observable.interval(5000)
-    .subscribe((val) => {
-      this.updateLocation();
-    });*/
-    
-    var k = 0;
-    this.userDetail.subscribe(snapshot => {
-      snapshot.forEach(snap => {
-        this.dbLocation[k] = snap.val().location;
-        this.dbLocLat[k] = snap.val().locLat;
-        this.dbLocLng[k] = snap.val().locLng;
-        console.log(snap.val().location);
-        console.log(snap.val().locLat);
-        console.log(snap.val().locLng);
-        k++;
-      });
-    });
 
     var j = 0;
     this.session.subscribe(snapshots => {
       snapshots.forEach(snapshot => {
         this.dbFName[j] = snapshot.val().fName;
         this.dbLName[j] = snapshot.val().lName;
+        this.dbLocation[j] = snapshot.val().location;
+        this.dbLocLat[j] = snapshot.val().latitude;
+        this.dbLocLng[j] = snapshot.val().longitude;
         j++;
       });
     });
@@ -93,7 +83,7 @@ export class RateTrafficPage {
       var location = {
         "lat": position.coords.latitude,
         "lng": position.coords.longitude,
-        "timeStamp": moment().format('MM/DD/YYYY hh:mm:ss A').toString()
+        "timeStamp": moment().format('MMMM Do YYYY, hh:mm:ss A').toString()
       }
       console.log(position.coords.latitude, position.coords.longitude);
       this.firebase.updateLocation(location);
@@ -101,32 +91,46 @@ export class RateTrafficPage {
   }
 
   addRateTraffic(info) {
-    this.getUser();       
-    var k = 0;
+    this.getUser();
+
     this.rateTrafficInfo = {
       "category": 'Traffic',
       "subcategory": info,
-      "notifDetail": info + ' Traffic: ' + this.dbLocation[k],
-      "locLat": this.dbLocLat[k],
-      "locLng": this.dbLocLng[k],
-      "timeStamp": moment().format('MM/DD/YYYY hh:mm:ss A').toString(),
+      "notifDetail": info + ' Traffic: ' + this.location,
+      "timeStamp": moment().format('MMMM Do YYYY, hh:mm:ss A').toString(),
       "fName": this.fName,
       "lName": this.lName,
       "sort": 0 - Date.now()
     };
-     this.firebase.getMap().subscribe(snapshot => {
+    this.firebase.addRateTraffic(this.rateTrafficInfo);
+
+    this.mapUpdate = {
+      "tlatitude": this.latitude,
+      "tlongitude": this.longitude,
+      "trafficRating": info + ' Traffic',
+      "trafficTimeStamp": moment().format('MMMM Do YYYY, hh:mm:ss A').toString(),
+      "tFName": this.fName,
+      "tLName": this.lName
+    };
+    this.firebase.updateMapData(this.location, this.mapUpdate);
+
+
+    /*console.log(this.dbLocation[k]);
+    this.firebase.getMapTraffic().subscribe(snapshot => {
       snapshot.forEach(snap => {
-        console.log("traffic log");
-        if(snap.fName == this.fName) {
+        console.log("log traffic");
+        if(snap.tfName == this.fName) {
           var key = snap.$key;
-          this.firebase.updateRateTraffic(this.rateTrafficInfo, key);
+          this.firebase.updateRateTraffic(this.updateTrafficInfo, location);
         }
+        console.log(this.location);
       });
       if(snapshot.length == 0) {
-        this.firebase.addRateTraffic(this.rateTrafficInfo);
+        this.firebase.addRateTraffic(this.updateTrafficInfo);
       }
+      console.log(snapshot.length);
     });
-    this.firebase.updateRateNotif(this.rateTrafficInfo);
+    this.firebase.updateRateNotif(this.rateTrafficInfo);*/
   }
 
   getLastTraffic() {
@@ -178,5 +182,46 @@ export class RateTrafficPage {
     for(var j = 0; j<this.dbLName.length; j++) {
        this.lName = this.dbLName[j];
     }
+
+    for(var k = 0; k<this.dbLocation.length; k++) {
+      this.location = this.dbLocation[k];
+    }
+
+    for(var l = 0; l<this.dbLocLat.length; l++) {
+      this.latitude = this.dbLocLat[l];
+    }
+
+    for(var m = 0; m<this.dbLocLng.length; m++) {
+      this.longitude = this.dbLocLng[m];
+    }
+  }
+
+  // LOGOUT
+  logout() {
+    let confirm = this.alertCtrl.create({
+      title: 'Logout',
+      message: 'Are you sure you want to logout?',
+      buttons: [
+        {
+          text: 'No',
+          handler: () => {
+            console.log("no clicked");
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            console.log("yes clicked");
+            this.app.getRootNav().setRoot(LoginPage);
+            let toast = this.toastCtrl.create({
+              message: 'You have successfully logged out.',
+              duration: 2000
+            });
+            toast.present();
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
 }
