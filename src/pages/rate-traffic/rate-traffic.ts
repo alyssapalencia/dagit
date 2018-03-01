@@ -87,18 +87,20 @@ export class RateTrafficPage {
       "category": 'Traffic',
       "subcategory": info,
       "notifDetail": info + ' Traffic: ' + this.location,
-      "timeStamp": moment().format('MMMM Do YYYY, hh:mm:ss A').toString(),
+      "timeStamp": moment().format('MMMM Do YYYY, hh:mm A').toString(),
       "fName": this.fName,
       "lName": this.lName,
       "sort": 0 - Date.now()
     };
     this.firebase.addRateTraffic(this.rateTrafficInfo);
+    const date = moment().format('MMMM D YYYY');
+    this.firebase.addNotifLog(date, this.rateTrafficInfo);
 
     this.mapUpdate = {
       "tlatitude": this.latitude,
       "tlongitude": this.longitude,
       "trafficRating": info + ' Traffic',
-      "trafficTimeStamp": moment().format('MMMM Do YYYY, hh:mm:ss A').toString(),
+      "trafficTimeStamp": moment().format('MMMM Do YYYY, hh:mm A').toString(),
       "tFName": this.fName,
       "tLName": this.lName
     };

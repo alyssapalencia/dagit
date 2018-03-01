@@ -59,6 +59,10 @@ export class Firebase{
           preserveSnapshot: true
         });
     }
+
+    addNotifLog(date, notification) {
+        this.dagit.list('/LOGS/' + date).push(notification);
+    }
     
     addSession(sessionInfo){
         this.dagit.list('/SESSIONS').push(sessionInfo);

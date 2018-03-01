@@ -82,21 +82,12 @@ export class LoginPage {
 				this.firebaseApp.database().ref("LOCATION").child(uid).update({
 					lat: pos.coords.latitude,
           lng: pos.coords.longitude,
-          timeStamp: moment().format('MMMM Do YYYY, hh:mm:ss A').toString(),
+          timeStamp: moment().format('MMMM Do YYYY, hh:mm A').toString(),
           fName: this.lastFName,
           lName: this.lastLName
 				});
 			}
 		}); 
-  }
-
-  updateMarkerPosition(location) {
-    this.marker.setPosition({
-      "lat": location.latLng.lat(),
-      "lng": location.latLng.lng(),
-      "timeStamp": moment().format('MMMM Do YYYY hh:mm:ss A').toString()
-    });
-    this.firebase.updateLocation(location);
   }
 
   // CHECK CREDENTIALS

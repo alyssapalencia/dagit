@@ -87,18 +87,20 @@ export class ParkingPage {
       "category": 'Parking',
       "subcategory": info,
       "notifDetail": info + ' Parking: ' + this.location,
-      "timeStamp": moment().format('MMMM Do YYYY, hh:mm:ss A').toString(),
+      "timeStamp": moment().format('MMMM Do YYYY, hh:mm A').toString(),
       "fName": this.fName,
       "lName": this.lName,
       "sort": 0 - Date.now()
     };
     this.firebase.addParking(this.rateParkingInfo);
+    const date = moment().format('MMMM D YYYY');
+    this.firebase.addNotifLog(date, this.rateParkingInfo);
 
     this.mapUpdate = {
       "platitude": this.latitude + 0.0001,
       "plongitude": this.longitude + 0.0001,
       "parkingAvailability": info + ' Parking',
-      "parkingTimeStamp": moment().format('MMMM Do YYYY, hh:mm:ss A').toString(),
+      "parkingTimeStamp": moment().format('MMMM Do YYYY, hh:mm A').toString(),
       "pFName": this.fName,
       "pLName": this.lName
     }
