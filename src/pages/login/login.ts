@@ -45,7 +45,7 @@ export class LoginPage {
   watch;
   userkey;
   marker;
-  usernode;
+  //usernode;
 
   constructor(public firebaseApp: FirebaseApp, public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public toastCtrl: ToastController, private geolocation: Geolocation) {
       this.userInfo = this.firebase.getUserDetail();
