@@ -17,11 +17,23 @@
     <ion-col>
       <ion-item>
         <ion-avatar item-start>
+          <img src="./assets/imgs/user.png">
+        </ion-avatar>
+        <h2 style="color:black; font-weight:bold;">Logged In As</h2>
+        <div text-wrap>
+          <p style="color:black; font-weight:bold;">{{ currUser.fName }} {{ currUser.lName }}</p>
+        </div>
+      </ion-item>
+    </ion-col>
+
+    <ion-col>
+      <ion-item>
+        <ion-avatar item-start>
           <img src="./assets/imgs/alert.png">
         </ion-avatar>
-        <h2>Current Status</h2>
+        <h2 style="color:black; font-weight:bold;">Current Status</h2>
             <div text-wrap>
-              <p>{{ lastTraffic }}: {{ location }}</p>
+              <p style="color:black; font-weight:bold;">{{ lastTraffic }}: {{ location }}</p>
             </div>
       </ion-item>
 
@@ -29,8 +41,8 @@
         <ion-avatar item-start>
           <img src="./assets/imgs/time.png">
         </ion-avatar>
-        <h2>Last Updated</h2>
-        <p>{{ lastTime }}</p>
+        <h2 style="color:black; font-weight:bold;">Last Updated</h2>
+        <p style="color:black; font-weight:bold;">{{ lastTime }}</p>
       </ion-item>
     </ion-col>
   </ion-row>
