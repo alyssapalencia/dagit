@@ -20,14 +20,8 @@
           <img src="./assets/imgs/alert.png">
         </ion-avatar>
         <h2>Current Status</h2>
-            <div *ngIf = 'getRating() == "Light"' text-wrap>
-              <p>{{ getLastTraffic() }}</p>
-            </div>
-            <div *ngIf = 'getRating() == "Moderate"' text-wrap>
-              <p>{{ getLastTraffic() }}</p>
-            </div>
-            <div *ngIf = 'getRating() == "Heavy"' text-wrap>
-              <p>{{ getLastTraffic() }}</p>
+            <div text-wrap>
+              <p>{{ lastTraffic }}: {{ location }}</p>
             </div>
       </ion-item>
 
@@ -36,7 +30,7 @@
           <img src="./assets/imgs/time.png">
         </ion-avatar>
         <h2>Last Updated</h2>
-        <p>{{ getLastTime() }}</p>
+        <p>{{ lastTime }}</p>
       </ion-item>
     </ion-col>
   </ion-row>

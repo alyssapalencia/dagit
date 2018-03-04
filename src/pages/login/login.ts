@@ -23,47 +23,14 @@ export class LoginPage {
   confirmPass: any[] = [];
   enabled: any[] = [];
 
-  // FETCH DB
-  dbFName: any[] = [];
-  dbLName: any[] = [];
-  dbLocation: any[] = [];
-  dbLatitude: any[] = [];
-  dbLongitude: any[] = [];
-  dbKey: any[] = [];
-  // TRACKER
-  //latLng: any;
-  latitude: any;
-  longitude: any;
-
   // LAST UPDATE
-  lastFName: any;
-  lastLName: any;
-  lastLocation: any;
-  lastLatitude: any;
-  lastLongitude: any;
   sessionInfo: any;
+  currUser: any;
   watch;
   userkey;
-  marker;
-  usernode;
 
   constructor(public firebaseApp: FirebaseApp, public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public toastCtrl: ToastController, private geolocation: Geolocation) {
       this.userInfo = this.firebase.getUserDetail();
-      var i = 0;
-      this.userInfo.subscribe(snapshots => {
-        snapshots.forEach(snapshot => {
-          this.dbKey[i] = snapshot.key
-          this.confirmUser[i] = snapshot.val().username;
-          this.confirmPass[i] = snapshot.val().password;
-          this.dbFName[i] = snapshot.val().fName;
-          this.dbLName[i] = snapshot.val().lName;
-          this.dbLocation[i] = snapshot.val().location;
-          this.dbLatitude[i] = snapshot.val().locLat;
-          this.dbLongitude[i] = snapshot.val().locLng;
-          this.enabled[i] = snapshot.val().enabled;
-          i++;
-        });
-      });
   }
 
   ionViewDidLoad() {
@@ -83,8 +50,8 @@ export class LoginPage {
 					lat: pos.coords.latitude,
           lng: pos.coords.longitude,
           timeStamp: moment().format('MMMM Do YYYY, hh:mm A').toString(),
-          fName: this.lastFName,
-          lName: this.lastLName
+          fName: this.currUser.fName,
+          lName: this.currUser.lName
 				});
 			}
 		}); 
@@ -93,61 +60,57 @@ export class LoginPage {
   // CHECK CREDENTIALS
   checkAuth(){
     var check=false;
-    for(var i=0; i<this.confirmUser.length; i++)
-    {
-      if(this.tempuser == this.confirmUser[i]){
-        if(this.temppass == this.confirmPass[i]){
-          check = true;
-          if(this.enabled[i] == "yes"){
-            this.userkey = this.dbKey[i];
-            this.watchUserLocation(this.userkey);
-            this.lastFName = this.dbFName[i];
-            this.lastLName = this.dbLName[i];
-            this.lastLocation = this.dbLocation[i];
-            this.lastLatitude = this.dbLatitude[i];
-            this.lastLongitude = this.dbLongitude[i];
-            this.addSession();
-            console.log("logged in");
-            this.navCtrl.setRoot('TabsPage');
-            this.navCtrl.popToRoot();
-            let toast = this.toastCtrl.create({
-            message: 'Login successful.',
-              duration: 2000,
-            });
-            toast.present();
-          }
-          else
-          {
-            let toast = this.toastCtrl.create({
-              message: 'Account is disabled',
+    this.userInfo.subscribe(snapshots => {
+      snapshots.forEach(snapshot => {
+        if(this.tempuser == snapshot.username){
+          if(this.temppass == snapshot.password){
+            check = true;
+            if(snapshot.enabled == "yes"){
+              this.currUser = snapshot;
+              this.userkey = snapshot.$key;
+              this.firebase.watchUserLocation('login');
+              this.addSession();
+              this.firebase.setCurrentUser(snapshot);
+              console.log("logged in");
+              this.navCtrl.setRoot('TabsPage');
+              this.navCtrl.popToRoot();
+              let toast = this.toastCtrl.create({
+              message: 'Login successful.',
                 duration: 2000,
               });
               toast.present();
+            }
+            else
+            {
+              let toast = this.toastCtrl.create({
+                message: 'Account is disabled',
+                  duration: 2000,
+                });
+                toast.present();
+            }
           }
         }
-      }
-    }
-    if(!check){
-      console.log("incorrect credentials");
-      let toast = this.toastCtrl.create({
-        message: 'Incorrect credentials. Try again.',
-        duration: 2000
       });
-      toast.present();
-    }
+      if(!check){
+        console.log("incorrect credentials");
+        let toast = this.toastCtrl.create({
+          message: 'Incorrect credentials. Try again.',
+          duration: 2000
+        });
+        toast.present();
+      }
+    });
   }
 
   addSession(){
-    console.log(this.lastLocation);
-    console.log(this.lastLatitude);
-    console.log(this.lastLongitude);
     this.sessionInfo = {
-      "fName": this.lastFName,
-      "lName": this.lastLName,
-      "location": this.lastLocation,
-      "latitude": this.lastLatitude,
-      "longitude": this.lastLongitude
+      "fName": this.currUser.fName,
+      "lName": this.currUser.lName,
+      "lastLogin": moment().format('MMMM Do YYYY, hh:mm A').toString(),
+      "location": this.currUser.location,
+      "latitude": this.currUser.locLat,
+      "longitude": this.currUser.locLng
     };
-    this.firebase.addSession(this.sessionInfo);
+    this.firebase.addSession(this.sessionInfo, this.currUser.username);
   }
 }
