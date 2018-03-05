@@ -24,6 +24,7 @@ export class Firebase{
         if(state == 'login'){
             this.watch = this.geolocation.watchPosition(watchOptions).subscribe(pos => {
                 if(pos.coords != undefined){
+                    console.log('tracking');
                     this.firebaseApp.database().ref("LOCATION").child(this.user.$key).update({
                         lat: pos.coords.latitude,
                         lng: pos.coords.longitude,
