@@ -18,10 +18,8 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-avatar item-start>
-            <img src="./assets/imgs/user.png">
-          </ion-avatar>
-          <h2 class="label">Logged In As</h2>
+          <ion-icon name="contact" item-start large color="primary"></ion-icon>
+          <h2>Logged In As</h2>
           <p class="label" text-wrap>{{ currUser.fName}} {{ currUser.lName }}</p>
         </ion-item>
       </ion-col>
@@ -34,10 +32,8 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-avatar item-start>
-            <img src="./assets/imgs/alert.png">
-          </ion-avatar>
-          <h2 class="label">Current Status</h2>
+          <ion-icon name="alert" item-start large color="primary"></ion-icon>
+          <h2>Current Status</h2>
           <p class="label" text-wrap>{{ lastParking}}: {{ location }}</p>
         </ion-item>
       </ion-col>
@@ -50,10 +46,8 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-avatar item-start>
-            <img src="./assets/imgs/time.png">
-          </ion-avatar>
-          <h2 class="label">Last Updated</h2>
+          <ion-icon name="time" item-start large color="primary"></ion-icon>
+          <h2>Last Updated</h2>
           <p class="label" text-wrap>{{ lastTime }}</p>
         </ion-item>
       </ion-col>
@@ -63,14 +57,14 @@
 
   <ion-row> 
     <ion-col>
-        <button ion-button icon-left full large color="btngreen" (click)="addParking('Available')">
+        <button ion-button icon-left full large color="btnBlue" (click)="addParking('Available')">
           <ion-icon name="checkmark-circle"></ion-icon>
-          PARKING AVAILABLE
+          AVAILABLE PARKING
         </button>
         <br>
-        <button ion-button icon-left full large color="btnred" (click)="addParking('No Available')">
+        <button ion-button icon-left full large color="btnOrange" (click)="addParking('No Available')">
           <ion-icon name="close-circle"></ion-icon>
-          PARKING UNAVAILABLE
+          NO AVAILABLE PARKING
         </button>
     </ion-col>
   </ion-row>
