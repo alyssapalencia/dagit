@@ -13,6 +13,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Firebase } from './../providers/firebase';
 import { Geolocation } from '@ionic-native/geolocation';
 
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
+
 
 var dagitFirebase = {
   apiKey: "AIzaSyDPsMJ-x7W6_U_k3JsNwMNkxL38e8NkQDI",
