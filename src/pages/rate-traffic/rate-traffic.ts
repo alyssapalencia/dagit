@@ -1,14 +1,16 @@
+/* UPDATE AS OF MARCH 11, 2018 @ 7:38AM                             *
+ * Removed declare var google;                                      *
+ * Removed import { Geolocation } from '@ionic-native/geolocation'; *
+ * Removed import { Observable } from 'rxjs/Rx';                    *
+ * Removed private geolocation: Geolocation                         */
+
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, App, ToastController } from 'ionic-angular';
 import { Firebase } from '../../providers/firebase';
-import { Geolocation } from '@ionic-native/geolocation';
-import { Observable } from 'rxjs/Rx';
 import * as moment from 'moment';
 
 // IMPORTED PAGES
 import { LoginPage } from '../login/login';
-
-declare var google;
 
 @IonicPage()
 @Component({
@@ -31,8 +33,7 @@ export class RateTrafficPage {
   lastTime: any;
 
   constructor(public navCtrl: NavController, 
-    public navParams: NavParams, public firebase: Firebase, public alertCtrl: AlertController, 
-    private geolocation: Geolocation, private app: App, public toastCtrl: ToastController) {
+    public navParams: NavParams, public firebase: Firebase, public alertCtrl: AlertController, private app: App, public toastCtrl: ToastController) {
     this.currUser = firebase.getCurrentUser();
     this.trafficStatus = this.firebase.getMap();
     this.trafficStatus.subscribe(snapshot => {
@@ -93,7 +94,7 @@ export class RateTrafficPage {
             this.firebase.providerLogout();
             this.app.getRootNav().setRoot(LoginPage);
             let toast = this.toastCtrl.create({
-              message: 'You have successfully logged out.',
+              message: 'You have successfully logged out',
               duration: 2000
             });
             toast.present();

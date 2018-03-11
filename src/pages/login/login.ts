@@ -1,12 +1,14 @@
+/* UPDATE AS OF MARCH 11, 2018 @ 7:29AM                             *
+ * Removed declare var google;                                      *
+ * Removed import { Geolocation } from '@ionic-native/geolocation'; *
+ * Removed private geolocation: Geolocation                         *
+ * Removed import { Observable } from 'rxjs/Rx';                    */
+
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { Firebase } from '../../providers/firebase';
 import { FirebaseApp } from 'angularfire2';
-import { Geolocation } from '@ionic-native/geolocation';
-import { Observable } from 'rxjs/Rx';
 import * as moment from 'moment';
-
-declare var google;
 
 @IonicPage()
 @Component({
@@ -29,7 +31,7 @@ export class LoginPage {
   watch;
   userkey;
 
-  constructor(public firebaseApp: FirebaseApp, public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public toastCtrl: ToastController, private geolocation: Geolocation) {
+  constructor(public firebaseApp: FirebaseApp, public navCtrl: NavController, public navParams: NavParams, public firebase: Firebase, public toastCtrl: ToastController) {
       this.userInfo = this.firebase.getUserDetail();
   }
 
@@ -55,7 +57,7 @@ export class LoginPage {
               this.navCtrl.setRoot('TabsPage');
               this.navCtrl.popToRoot();
               let toast = this.toastCtrl.create({
-              message: 'Login successful.',
+              message: 'Login successful',
                 duration: 2000,
               });
               toast.present();
@@ -74,7 +76,7 @@ export class LoginPage {
       if(!check){
         console.log("incorrect credentials");
         let toast = this.toastCtrl.create({
-          message: 'Incorrect credentials. Try again.',
+          message: 'Incorrect credentials, try again',
           duration: 2000
         });
         toast.present();

@@ -1,13 +1,16 @@
+/* UPDATE AS OF MARCH 11, 2018 @ 7:30AM                             *
+ * Removed declare var google;                                      *
+ * Removed import { Geolocation } from '@ionic-native/geolocation'; *
+ * Removed private geolocation: Geolocation                         *
+ * Removed var k = 0; from addParking(info)                         */
+
 import { Component } from '@angular/core';
 import { IonicPage, NavController, AlertController, ToastController, NavParams, App } from 'ionic-angular';
 import { Firebase } from '../../providers/firebase';
-import { Geolocation } from '@ionic-native/geolocation';
 import * as moment from 'moment';
 
 // IMPORTED PAGES
 import { LoginPage } from '../login/login';
-
-declare var google;
 
 @IonicPage()
 @Component({
@@ -29,7 +32,7 @@ export class ParkingPage {
   lastParking = '';
   lastTime: any;
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public toastCtrl: ToastController, public navParams: NavParams, public firebase: Firebase, private geolocation: Geolocation, private app: App) {
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public toastCtrl: ToastController, public navParams: NavParams, public firebase: Firebase, private app: App) {
     this.parkingStatus = this.firebase.getMap();
     this.currUser = firebase.getCurrentUser();
 
@@ -49,7 +52,6 @@ export class ParkingPage {
   }
 
   addParking(info) {
-    var k = 0;
     this.rateParkingInfo = {
       "category": 'Parking',
       "subcategory": info,
@@ -95,7 +97,7 @@ export class ParkingPage {
             this.firebase.providerLogout();
             this.app.getRootNav().setRoot(LoginPage);
             let toast = this.toastCtrl.create({
-              message: 'You have successfully logged out.',
+              message: 'You have successfully logged out',
               duration: 2000
             });
             toast.present();
