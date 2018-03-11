@@ -94,7 +94,7 @@ export class RateTrafficPage {
             this.firebase.providerLogout();
             this.app.getRootNav().setRoot(LoginPage);
             let toast = this.toastCtrl.create({
-              message: 'You have successfully logged out.',
+              message: 'You have successfully logged out',
               duration: 2000
             });
             toast.present();

@@ -57,7 +57,7 @@ export class LoginPage {
               this.navCtrl.setRoot('TabsPage');
               this.navCtrl.popToRoot();
               let toast = this.toastCtrl.create({
-              message: 'Login successful.',
+              message: 'Login successful',
                 duration: 2000,
               });
               toast.present();
@@ -76,7 +76,7 @@ export class LoginPage {
       if(!check){
         console.log("incorrect credentials");
         let toast = this.toastCtrl.create({
-          message: 'Incorrect credentials. Try again.',
+          message: 'Incorrect credentials, try again',
           duration: 2000
         });
         toast.present();
