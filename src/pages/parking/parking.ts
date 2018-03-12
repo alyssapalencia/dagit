@@ -12,6 +12,8 @@ import * as moment from 'moment';
 // IMPORTED PAGES
 import { LoginPage } from '../login/login';
 
+declare var google;
+
 @IonicPage()
 @Component({
   selector: 'page-parking',
@@ -21,20 +23,27 @@ export class ParkingPage {
 
   today = new Date();
   rateParkingInfo: any;
-  //updateParkingInfo: any;
   parkingStatus: any;
   mapUpdate: any;
   location: any;
 
   currUser: any;
+  currLoc: any;
 
   // LATEST UPDATE
   lastParking = '';
   lastTime: any;
 
+  // LAST LOCATION
+  lastLat: any;
+  lastLng: any;
+  lastLoc: any;
+  place: any;
+
   constructor(public navCtrl: NavController, public alertCtrl: AlertController, public toastCtrl: ToastController, public navParams: NavParams, public firebase: Firebase, private app: App) {
-    this.parkingStatus = this.firebase.getMap();
     this.currUser = firebase.getCurrentUser();
+    this.parkingStatus = this.firebase.getMap();
+    this.currLoc = this.firebase.getLocation();
 
     this.parkingStatus.subscribe(snapshot => {
       snapshot.forEach(snap => {
@@ -45,6 +54,15 @@ export class ParkingPage {
         }
       });
     });
+
+    this.currLoc.subscribe(snapshot => {
+      snapshot.forEach(snap => {
+        if(this.currUser.fName == snap.fName && this.currUser.lName == snap.lName) {
+          this.lastLat = snap.lat;
+          this.lastLng = snap.lng;
+        }
+      })
+    })
   }
 
   ionViewDidLoad() {
@@ -55,7 +73,7 @@ export class ParkingPage {
     this.rateParkingInfo = {
       "category": 'Parking',
       "subcategory": info,
-      "notifDetail": info + ' Parking: ' + this.currUser.location,
+      "notifDetail": info + ' Parking near ' + this.currUser.location,
       "timeStamp": moment().format('MMMM Do YYYY, hh:mm A').toString(),
       "fName": this.currUser.fName,
       "lName": this.currUser.lName,
@@ -66,14 +84,13 @@ export class ParkingPage {
     this.firebase.addNotifLog(date, this.rateParkingInfo);
 
     this.mapUpdate = {
-      "platitude": this.currUser.locLat + 0.0001,
-      "plongitude": this.currUser.locLng + 0.0001,
+      "platitude": this.lastLat + 0.0001,
+      "plongitude": this.lastLng + 0.0001,
       "parkingAvailability": info + ' Parking',
       "parkingTimeStamp": moment().format('MMMM Do YYYY, hh:mm A').toString(),
       "pFName": this.currUser.fName,
       "pLName": this.currUser.lName
     }
-
     this.firebase.updateMapData(this.currUser.location, this.mapUpdate);
   }
 
