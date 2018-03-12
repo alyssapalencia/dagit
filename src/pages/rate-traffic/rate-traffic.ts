@@ -27,21 +27,39 @@ export class RateTrafficPage {
   location: any;
 
   currUser: any;
+  currLoc: any;
 
   // LATEST UPDATE
   lastTraffic: any;;
   lastTime: any;
 
+  // LAST LOCATION
+  lastLat: any;
+  lastLng: any;
+  lastLoc: any;
+
   constructor(public navCtrl: NavController, 
     public navParams: NavParams, public firebase: Firebase, public alertCtrl: AlertController, private app: App, public toastCtrl: ToastController) {
     this.currUser = firebase.getCurrentUser();
     this.trafficStatus = this.firebase.getMap();
+    this.currLoc = this.firebase.getLocation();
+
     this.trafficStatus.subscribe(snapshot => {
       snapshot.forEach(snap => {
         if(this.currUser.location == snap.$key){
           this.lastTraffic = snap.trafficRating;
           this.lastTime = snap.trafficTimeStamp;
           this.location = snap.$key;
+        }
+      });
+    });
+
+    this.currLoc.subscribe(snapshot => {
+      snapshot.forEach(snap => {
+        if(this.currUser.fName == snap.fName && this.currUser.lName == snap.lName) {
+          this.lastLat = snap.lat;
+          this.lastLng = snap.lng;
+          console.log(snap.lat, snap.lng);
         }
       });
     });
@@ -52,7 +70,7 @@ export class RateTrafficPage {
     this.rateTrafficInfo = {
       "category": 'Traffic',
       "subcategory": info,
-      "notifDetail": info + ' Traffic: ' + this.currUser.location,
+      "notifDetail": info + ' Traffic near ' + this.currUser.location,
       "timeStamp": moment().format('MMMM Do YYYY, hh:mm A').toString(),
       "fName": this.currUser.fName,
       "lName": this.currUser.lName,
@@ -63,8 +81,8 @@ export class RateTrafficPage {
     this.firebase.addNotifLog(date, this.rateTrafficInfo);
 
     this.mapUpdate = {
-      "tlatitude": this.currUser.locLat,
-      "tlongitude": this.currUser.locLng,
+      "tlatitude": this.lastLat,
+      "tlongitude": this.lastLng,
       "trafficRating": info + ' Traffic',
       "timeUpdated": Date.now(),
       "trafficTimeStamp": moment().format('MMMM Do YYYY, hh:mm A').toString(),

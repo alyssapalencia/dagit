@@ -107,6 +107,10 @@ export class Firebase{
         return this.dagit.list('SESSIONS');
     }
 
+    getLocation() { 
+        return this.dagit.list('LOCATION');
+    }
+
     updateLocation(location) {
         this.dagit.object('/LOCATION/' + this.user).update(location);
     }
