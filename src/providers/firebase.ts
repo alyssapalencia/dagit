@@ -57,6 +57,10 @@ export class Firebase{
         return this.dagit.list('/MAP/');
     }
 
+    getMaps() {
+        return this.dagit.list('/MAPS/');
+    }
+
     addRateTraffic(rateTraffic){
         this.dagit.list('/NOTIFICATIONS').push(rateTraffic);
     }
@@ -86,6 +90,10 @@ export class Firebase{
 
     updateMapData(location, update) {
         this.dagit.object('/MAP/' + location).update(update);
+    }
+
+    mapUpdateService(coordinates, update) {
+        this.dagit.object('/MAPS/' + coordinates).update(update);
     }
 
     // USER DETAILS
