@@ -41,19 +41,9 @@ export class ParkingPage {
   place: any;
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController, public toastCtrl: ToastController, public navParams: NavParams, public firebase: Firebase, private app: App) {
+    this.lastTime = moment().format('MMMM Do YYYY, hh:mm A').toString();
     this.currUser = firebase.getCurrentUser();
-    this.parkingStatus = this.firebase.getMap();
     this.currLoc = this.firebase.getLocation();
-
-    this.parkingStatus.subscribe(snapshot => {
-      snapshot.forEach(snap => {
-        if(this.currUser.location == snap.$key){
-          this.lastParking = snap.parkingAvailability;
-          this.lastTime = snap.parkingTimeStamp;
-          this.location = snap.$key;
-        }
-      });
-    });
 
     this.currLoc.subscribe(snapshot => {
       snapshot.forEach(snap => {
@@ -70,6 +60,8 @@ export class ParkingPage {
   }
 
   addParking(info) {
+    this.lastTime = moment().format('MMMM Do YYYY, hh:mm A').toString();
+
     this.rateParkingInfo = {
       "category": 'Parking',
       "subcategory": info,
@@ -91,7 +83,13 @@ export class ParkingPage {
       "pFName": this.currUser.fName,
       "pLName": this.currUser.lName
     }
-    this.firebase.updateMapData(this.currUser.location, this.mapUpdate);
+    var lat = this.lastLat.toString();
+    var finalLat = lat.replace('.', '-');
+    var lng = this.lastLng.toString();
+    var finalLng = lng.replace('.', '-');
+    var lastCoords = finalLat + finalLng;
+    this.firebase.mapUpdateService(lastCoords, this.mapUpdate);
+    //this.firebase.updateMapData(this.currUser.location, this.mapUpdate);
   }
 
   // LOGOUT

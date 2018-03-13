@@ -28,6 +28,7 @@ export class RateTrafficPage {
 
   currUser: any;
   currLoc: any;
+  lastUpdate: any;
 
   // LATEST UPDATE
   lastTraffic: any;;
@@ -40,19 +41,9 @@ export class RateTrafficPage {
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams, public firebase: Firebase, public alertCtrl: AlertController, private app: App, public toastCtrl: ToastController) {
+    this.lastTime = moment().format('MMMM Do YYYY, hh:mm A').toString();
     this.currUser = firebase.getCurrentUser();
-    this.trafficStatus = this.firebase.getMap();
     this.currLoc = this.firebase.getLocation();
-
-    this.trafficStatus.subscribe(snapshot => {
-      snapshot.forEach(snap => {
-        if(this.currUser.location == snap.$key){
-          this.lastTraffic = snap.trafficRating;
-          this.lastTime = snap.trafficTimeStamp;
-          this.location = snap.$key;
-        }
-      });
-    });
 
     this.currLoc.subscribe(snapshot => {
       snapshot.forEach(snap => {
@@ -66,6 +57,7 @@ export class RateTrafficPage {
   }
 
   addRateTraffic(info) {
+    this.lastTime = moment().format('MMMM Do YYYY, hh:mm A').toString();
 
     this.rateTrafficInfo = {
       "category": 'Traffic',
@@ -89,7 +81,13 @@ export class RateTrafficPage {
       "tFName": this.currUser.fName,
       "tLName": this.currUser.lName
     };
-    this.firebase.updateMapData(this.currUser.location, this.mapUpdate);
+    var lat = this.lastLat.toString();
+    var finalLat = lat.replace('.', '-');
+    var lng = this.lastLng.toString();
+    var finalLng = lng.replace('.', '-');
+    var lastCoords = finalLat + finalLng;
+    this.firebase.mapUpdateService(lastCoords, this.mapUpdate);
+    //this.firebase.updateMapData(this.currUser.location, this.mapUpdate);
   }
 
   // LOGOUT
